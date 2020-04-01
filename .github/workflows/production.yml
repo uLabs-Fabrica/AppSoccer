@@ -21,7 +21,6 @@ jobs:
       matrix:
         node-version: [12.x]
 
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       
@@ -40,13 +39,13 @@ jobs:
       run: |
         echo Add other actions to build,
         echo test, and deploy your project.
+    
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.1   
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     
-  
     # Install firebase cli
     - name: Install firebase cli
       run: |
@@ -55,5 +54,4 @@ jobs:
     # PUblish in firebase host
     - name: Publish in firebase hosting
       run: |
-        firebase deploy --token "1//0h7ivudyaIzFOCgYIARAAGBESNwF-L9IrglsMQm0hfii73S-jGPTvntvyExUZNalQ8zdGJRxtUCGI9VPqQhVlizPaDbj_bj50cL8"
- 
+        firebase deploy --token "${secret.FIREBASE_TOKEN_PRODUCTION}"
