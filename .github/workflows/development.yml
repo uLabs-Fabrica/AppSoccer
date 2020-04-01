@@ -82,4 +82,5 @@ jobs:
     # PUblish in firebase host
     - name: Publish in firebase hosting
       run: |
+        firebase use development > /dev/null
         firebase deploy --token "1//0hhcefh3OxScwCgYIARAAGBESNwF-L9IrZPlRI__R1Du8Bkgf7maGUM7_irGsDe6UWUgxh9d9U2nLAbuyk9vkYOTelmDs_4OV4Ek"
