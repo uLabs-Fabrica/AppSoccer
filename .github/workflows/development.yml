@@ -56,4 +56,5 @@ jobs:
     # PUblish in firebase host
     - name: Publish in firebase hosting
       run: |
-        firebase deploy  --project "development" --token "${secret.FIREBASE_TOKEN_DEVELOPMENT}"
+        firebase use development
+        firebase deploy --token "${secret.FIREBASE_TOKEN_DEVELOPMENT}"
