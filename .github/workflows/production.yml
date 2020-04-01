@@ -53,7 +53,7 @@ jobs:
         
     - name: Select firebase project
       run: |
-        firebase use appsoccer-2f000
+        firebase use default
         
     # PUblish in firebase host
     - name: Publish in firebase hosting
