@@ -1,0 +1,8 @@
+.login-body .p-nogutter .left-side img{
+    width:370px;
+}
+@media (max-width: 40em){
+    .login-body .p-nogutter .left-side img{
+    width:200px;
+}
+}
