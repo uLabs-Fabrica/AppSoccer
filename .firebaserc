@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "appsoccer-2f000"
+    "default": "appsoccer-2f000",
+    "development" : "appsoccerdevelopment"
   }
 }
