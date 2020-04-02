@@ -6,9 +6,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ development ]
   pull_request:
-    branches: [ master ]
+    branches: [ development ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -21,9 +21,34 @@ jobs:
       matrix:
         node-version: [12.x]
 
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    - name: Dump job context
+      env:
+        JOB_CONTEXT: ${{ toJson(job) }}
+      run: echo "$JOB_CONTEXT"
+    - name: Dump steps context
+      env:
+        STEPS_CONTEXT: ${{ toJson(steps) }}
+      run: echo "$STEPS_CONTEXT"
+    - name: Dump runner context
+      env:
+        RUNNER_CONTEXT: ${{ toJson(runner) }}
+      run: echo "$RUNNER_CONTEXT"
+    - name: Dump strategy context
+      env:
+        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+      run: echo "$STRATEGY_CONTEXT"
+    - name: Dump matrix context
+      env:
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+      run: echo "$MATRIX_CONTEXT"
       
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
@@ -40,20 +65,18 @@ jobs:
       run: |
         echo Add other actions to build,
         echo test, and deploy your project.
+    
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.1   
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     
-  
-    # Install firebase cli
-    - name: Install firebase cli
-      run: |
-        npm install -g firebase-tools
-        
-    # PUblish in firebase host
-    - name: Publish in firebase hosting
-      run: |
-        firebase deploy --token "1//0h7ivudyaIzFOCgYIARAAGBESNwF-L9IrglsMQm0hfii73S-jGPTvntvyExUZNalQ8zdGJRxtUCGI9VPqQhVlizPaDbj_bj50cL8"
- 
+    - name: Deploy to Firebase
+      uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only hosting
+      env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: development
+
