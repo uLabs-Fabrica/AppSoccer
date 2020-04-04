@@ -1,12 +1,51 @@
-import React, { Component } from 'react';
+import React, { useCallback, useState, useEffect} from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from "primereact/button";
-import "./style.css"
+import "./style.css";
+import firebase from '../../config/Firebase';
+import {Dialog} from 'primereact/dialog';
+import {getUid} from '../../service/AuthService'
 
-export default class Login extends Component {
-
-    render() {
-        return <div className="login-body">
+function Login () {
+    const [email, setInput] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorLabel, setError] = useState('');
+    const autentication = function () {
+        console.log(email, password);
+        if(email === ''){
+            setError("Email obrigatório");
+            return;
+        }
+        if(password === ''){
+            setError("Senha obrigatória");
+            return;
+        }
+        
+        getUid(email,password).then((uid)=>{
+            console.log(uid);
+            //     const db =  firebase.firestore();
+            //     let uid = resp.user.uid;
+            //     let ref = db.collection('roles').doc("BxJj5DlzaOYWnfGpo5g4g0Kp88Q2");
+            //     ref.get().then(doc => {
+            //         if (!doc.exists) {
+            //             console.log('No such document!');
+            //         } else {
+            //             console.log('Document data:', doc.data());
+            //         }
+            //     })
+            //     .catch(err => {
+            //         console.log('Error getting document', err);
+            //     });
+            window.location = "/#/dashboard";
+        }, (error)=>{
+            setError(error);
+        })
+    }
+    return(
+        <div className="login-body">
+            <Dialog header="Erro" visible={errorLabel!=''} style={{ width: '50vw' }} modal={true} onHide={() => setError('')}>
+               {errorLabel}
+            </Dialog>
             <div className="body-container">
                 <div className="p-grid p-nogutter">
                     <div className="p-col-12 p-lg-6 left-side">
@@ -23,13 +62,15 @@ export default class Login extends Component {
 
                                 <div className="p-grid p-fluid">
                                     <div className="p-col-12">
-                                        <InputText placeholder="Username" />
+                                        <InputText  value={email} onChange={e => setInput(e.target.value)} type="email" placeholder="Username" />
                                     </div>
                                     <div className="p-col-12">
-                                        <InputText type="password" placeholder="Password" />
+                                        <InputText value={password} onChange={e => setPassword(e.target.value)} type="password" placeholder="Password" />
                                     </div>
+                                    {/*className={errorLabel != '' ? 'p-error':''} */}
                                     <div className="p-col-6">
-                                        <Button label="Entrar" icon="pi pi-check" onClick={() => { window.location = "/#/dashboard" }} />
+                                        {/* <Button label="Entrar" icon="pi pi-check" onClick={() => { window.location = "/#/dashboard" }} /> */}
+                                        <Button label="Entrar" icon="pi pi-check" onClick={autentication} />
                                     </div>
                                     <div className="p-col-6 password-container">
                                         <a href="/#">Esqueceu a senha?</a>
@@ -41,5 +82,7 @@ export default class Login extends Component {
                 </div>
             </div>
         </div>
-    }
+    )
 }
+
+export default Login;
