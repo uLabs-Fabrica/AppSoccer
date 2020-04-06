@@ -1,12 +1,14 @@
-import React,{createClass} from 'react';
+import React from 'react';
 import firebase from '../config/Firebase';
 
+ 
 
-export const getUid = (email, password) => {
+export const auth = (email, password) => {
     return new Promise((resolve,reject)=>{
         firebase.auth().signInWithEmailAndPassword(email, password).then((resp)=>{
             console.log(resp.user.uid);
-            resolve(resp.user.uid);
+            console.log(resp.user);
+            resolve(resp.user);
             //const db =  firebase.firestore();
             // let ref = db.collection('roles').doc("BxJj5DlzaOYWnfGpo5g4g0Kp88Q2");
             // ref.get().then(doc => {
@@ -43,4 +45,28 @@ export const getUid = (email, password) => {
         })
     })
 };
+export const getSession = () =>{
+    return new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                resolve(user);
+                // User is signed in.
+            } else {
+                reject("sem usuário")
+                // No user is signed in.
+            }
+        });
+    })
+}
+export const logout = () =>{
+    return new Promise((resolve, reject) => {
+        firebase.auth().signOut().then(function () {
+            // Sign-out successful.
+            resolve("success");
+        }).catch(function (error) {
+            reject(error);
+            // An error happened.
+        });
+    })
+}
 

@@ -1,15 +1,17 @@
-import React, { useCallback, useState, useEffect} from 'react';
+import React, { useContext, useCallback, useState, useEffect} from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from "primereact/button";
 import "./style.css";
 import firebase from '../../config/Firebase';
 import {Dialog} from 'primereact/dialog';
-import {getUid} from '../../service/AuthService'
+import {auth} from '../../service/AuthService';
+import { UserContext } from '../../context/User';
 
 function Login () {
     const [email, setInput] = useState('');
     const [password, setPassword] = useState('');
     const [errorLabel, setError] = useState('');
+    const { saveUser } = useContext(UserContext);
     const autentication = function () {
         console.log(email, password);
         if(email === ''){
@@ -21,8 +23,9 @@ function Login () {
             return;
         }
         
-        getUid(email,password).then((uid)=>{
-            console.log(uid);
+        auth(email,password).then((user)=>{
+            console.log(user);
+            saveUser(user);
             //     const db =  firebase.firestore();
             //     let uid = resp.user.uid;
             //     let ref = db.collection('roles').doc("BxJj5DlzaOYWnfGpo5g4g0Kp88Q2");
