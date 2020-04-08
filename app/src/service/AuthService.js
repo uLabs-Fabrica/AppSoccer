@@ -58,6 +58,19 @@ export const getSession = () =>{
         });
     })
 }
+export const changePassword = (email) => {
+    return new Promise((resolve, reject) => {
+        console.log("promisse")
+        firebase.auth().sendPasswordResetEmail(email).then((data)=>{
+            resolve(data)
+            console.log("sucesso email enviado")
+        },(error)=>{
+            console.log("error");
+            console.log(error);
+            reject(error);
+        })
+    })
+}
 export const logout = () =>{
     return new Promise((resolve, reject) => {
         firebase.auth().signOut().then(function () {

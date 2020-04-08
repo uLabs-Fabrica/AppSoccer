@@ -4,22 +4,24 @@ import { Button } from "primereact/button";
 import "./style.css";
 import firebase from '../../config/Firebase';
 import {Dialog} from 'primereact/dialog';
-import {auth} from '../../service/AuthService';
+import {auth, changePassword} from '../../service/AuthService';
 import { UserContext } from '../../context/User';
+import { Sidebar } from 'primereact/sidebar';
 
 function Login () {
     const [email, setInput] = useState('');
     const [password, setPassword] = useState('');
-    const [errorLabel, setError] = useState('');
+    const [alert, setAlert] = useState({title:'', label:''});
+    const [visible, setVisible] = useState(false);
     const { saveUser } = useContext(UserContext);
-    const autentication = function () {
+    const autentication = ()=>{
         console.log(email, password);
         if(email === ''){
-            setError("Email obrigatório");
+            setAlert({ title:"Atenção",label: "Email obrigatório"});
             return;
         }
         if(password === ''){
-            setError("Senha obrigatória");
+            setAlert({title:"Atenção",label:"Senha obrigatória"});
             return;
         }
         
@@ -41,13 +43,49 @@ function Login () {
             //     });
             window.location = "/#/dashboard";
         }, (error)=>{
-            setError(error);
+            setAlert({title:"Erro",label:error});
         })
+    }
+    const forgotPassword =()=>{
+        setVisible(false)
+        changePassword(email).then((data)=>{
+            setAlert({title:"Sucesso!",label:"Acesse seu email para redefinir a senha"});
+        },(error)=>{
+            switch (error.code) {
+                case "auth/user-not-found":
+                    error.message = "Usuário não encontrado, por favor verifique o email.";
+                    break;
+
+                default:
+                    error.message = "Usuário não encontrado, por favor verifique o email.";
+                    break;
+            }
+            setAlert({title:"Erro",label:error.message});
+        });
+    }
+    const close = ()=>{
+        alert("fechou")
+        setVisible(false)
     }
     return(
         <div className="login-body">
-            <Dialog header="Erro" visible={errorLabel!=''} style={{ width: '50vw' }} modal={true} onHide={() => setError('')}>
-               {errorLabel}
+            <Sidebar visible={visible} fullScreen={true} onHide={close}>
+                <div className="forgot-password">
+                    <div className="box">
+                        <div className="grow-1">
+                            <p>Digite seu email para enviarmos um link de recuperação de senha</p>
+                        </div>
+                        <div className="grow2">
+                            <InputText value={email} onChange={e => setInput(e.target.value)} type="email" placeholder="email" />
+                        </div>
+                        <div className="grow1">
+                            <Button label="Enviar" icon="pi pi-check" onClick={forgotPassword} />
+                        </div>
+                    </div>
+                </div>
+            </Sidebar>
+            <Dialog header={alert.title} visible={alert.label!=''} style={{ width: '50vw' }} modal={true} onHide={() => setAlert({label:''})}>
+               {alert.label}
             </Dialog>
             <div className="body-container">
                 <div className="p-grid p-nogutter">
@@ -76,7 +114,7 @@ function Login () {
                                         <Button label="Entrar" icon="pi pi-check" onClick={autentication} />
                                     </div>
                                     <div className="p-col-6 password-container">
-                                        <a href="/#">Esqueceu a senha?</a>
+                                        <a href="/#" onClick={()=>{setVisible(true)}}>Esqueceu a senha?</a>
                                     </div>
                                 </div>
                             </div>
