@@ -2,13 +2,14 @@ import React from 'react';
 export const createMenu = () =>{
 
     return [
-        { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+        { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' },
         {
             label: 'Perfil', icon: 'pi pi-fw pi-bars',
             items: [
                 {
                     label: 'Dados pessoais',
-                    icon: 'pi pi-fw pi-bars'
+                    icon: 'pi pi-fw pi-bars',
+                    to: '/personal-data'
                 },
                 {
                     label: 'Dados esportivos',

@@ -5,9 +5,12 @@ import Login from "../pages/Login";
 import Error from "../pages/Error";
 import NotFound from "../pages/NotFound";
 import Access from "../pages/Access";
+import PersonalData from '../pages/PersonalData';
+import FormsDemo from '../components/FormsDemo'
 import UserProvider from '../context/User'
 import {getSession} from '../service/AuthService';
 import firebase from '../config/Firebase';
+import { Dashboard } from '../pages/Dashboard';
 function Routes (props) {
     switch (props.location.pathname) {
         case "/login":
@@ -21,7 +24,7 @@ function Routes (props) {
         case "/dashboard":
             return <Route path="/dashboard" component={App} />
         default:
-            return <Login />;
+            return <App/>;
     }
 }
 

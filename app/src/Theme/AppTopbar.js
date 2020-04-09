@@ -1,15 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {InputText} from 'primereact/inputtext';
 import {InputSwitch} from 'primereact/inputswitch';
 import {UserContext} from '../context/User'
 import {logout} from '../service/AuthService';
-import {useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom';
+import {getSession} from '../service/AuthService';
 function AppTopbar (props){
 
     const history = useHistory();
     const context = useContext(UserContext);
+    const { saveUser } = useContext(UserContext);
+    useEffect(() => {
+        getSession().then((user) => {
+            saveUser(user);
+        }, (error) => {
+            history.push("/login");
+        })
+    });
     console.log(context);
     let topbarItemsClassName = classNames('topbar-menu fadeInDown', {'topbar-menu-visible': props.topbarMenuActive});
     const onTopbarItemClick = (event, item) =>{

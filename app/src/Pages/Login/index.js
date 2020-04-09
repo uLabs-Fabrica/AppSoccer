@@ -63,7 +63,7 @@ function Login () {
             setAlert({title:"Erro",label:error.message});
         });
     }
-    const close = ()=>{
+    const close = ()=>{ 
         alert("fechou")
         setVisible(false)
     }

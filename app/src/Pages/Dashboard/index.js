@@ -142,13 +142,13 @@ export function Dashboard(props) {
             { "brand": "Fiat", "year": 2013, "color": "Red", "vin": "245t2s" }
         ]
     )
-    useEffect(() => {
-        getSession().then((user) => {
-            saveUser(user);
-        },(error)=>{
-            history.push("/login");
-        })
-    });
+    // useEffect(() => {
+    //     getSession().then((user) => {
+    //         saveUser(user);
+    //     },(error)=>{
+    //         history.push("/login");
+    //     })
+    // });
     return (
         <div className="p-grid dashboard">
             <div className="p-col-12 p-md-3">
