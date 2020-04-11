@@ -12,19 +12,25 @@ import {getSession} from '../service/AuthService';
 import firebase from '../config/Firebase';
 import { Dashboard } from '../pages/Dashboard';
 function Routes (props) {
+    //alert(props.location.pathname);
+    console.log(props.location.pathname);
     switch (props.location.pathname) {
         case "/login":
             return <Route path="/login" component={Login} />
         case "/error":
             return <Route path="/error" component={Error} />
-        case "/notfound":
-            return <Route path="/notfound" component={NotFound} />
+        case "/":
+            return <Route path="/" component={Login} />
         case "/access":
             return <Route path="/access" component={Access} />
         case "/dashboard":
             return <Route path="/dashboard" component={App} />
+        case "/personal-data":
+            return <Route path="/personal-data" component={App} />
+        case "/sports-data":
+            return <Route path="/sports-data" component={App} />
         default:
-            return <App/>;
+            return <NotFound/>;
     }
 }
 

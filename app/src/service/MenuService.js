@@ -13,7 +13,8 @@ export const createMenu = () =>{
                 },
                 {
                     label: 'Dados esportivos',
-                    icon: 'pi pi-fw pi-bars'
+                    icon: 'pi pi-fw pi-bars',
+                    to: '/sports-data'
                 },
                 {
                     label: 'Dados médicos',

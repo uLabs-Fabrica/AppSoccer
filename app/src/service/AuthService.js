@@ -37,7 +37,7 @@ export const auth = (email, password) => {
                 case "auth/wrong-password":
                     error.message = "Senha inválida";
                     break;
-                default: error.message = "Erro ao registrar usuário";
+                default: error.message = "Erro na autenticação, verifique sua conexão";
             }
             reject(error.message)
             console.log("error");
