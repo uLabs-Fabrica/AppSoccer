@@ -67,10 +67,10 @@ jobs:
         echo test, and deploy your project.
     
     - name: restore
-      run: npm install
+      run: cd app && npm install
     
     - name: build
-      run: npm run build
+      run: cd app && npm run build
     
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.1   
