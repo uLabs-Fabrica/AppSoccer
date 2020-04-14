@@ -66,6 +66,14 @@ jobs:
         echo Add other actions to build,
         echo test, and deploy your project.
     
+    - name: restore
+      working-directory: ./app
+      run: npm install
+    
+    - name: build
+      working-directory: ./app
+      run: npm run build
+    
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.1   
       env:
