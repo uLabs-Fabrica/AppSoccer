@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Route, withRouter, useHistory } from 'react-router-dom';
 import App from "../Theme";
-import Login from "../pages/Login";
-import Error from "../pages/Error";
-import NotFound from "../pages/NotFound";
-import Access from "../pages/Access";
-import PersonalData from '../pages/PersonalData';
+import Login from "../Pages/Login";
+import Error from "../Pages/Error";
+import NotFound from "../Pages/NotFound";
+import Access from "../Pages/Access";
+import PersonalData from '../Pages/PersonalData';
 import FormsDemo from '../components/FormsDemo'
 import UserProvider from '../context/User'
 import {getSession} from '../service/AuthService';
 import firebase from '../config/Firebase';
-import { Dashboard } from '../pages/Dashboard';
+import { Dashboard } from '../Pages/Dashboard';
 function Routes (props) {
     //alert(props.location.pathname);
     console.log(props.location.pathname);
