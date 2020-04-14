@@ -30,6 +30,7 @@ import './style.css';
 import {createMenu} from '../service/MenuService'; 
 import PersonalData from '../pages/PersonalData';
 import SportsData from '../pages/SportsData';
+import Schedule from '../pages/Schedule';
 
 class App extends Component {
     //static contextType = MenuContext
@@ -309,6 +310,7 @@ class App extends Component {
                         <Route path="/forms" exact component={FormsDemo} />
                         <Route path="/personal-data" exact component={PersonalData} />
                         <Route path="/sports-data" exact component={SportsData} />
+                        <Route path="/schedule" exact component={Schedule} />
                         <Route path="/sample" component={SampleDemo} />
                         <Route path="/data" component={DataDemo} />
                         <Route path="/panels" component={PanelsDemo} />

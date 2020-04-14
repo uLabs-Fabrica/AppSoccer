@@ -29,6 +29,8 @@ function Routes (props) {
             return <Route path="/personal-data" component={App} />
         case "/sports-data":
             return <Route path="/sports-data" component={App} />
+        case "/schedule":
+            return <Route path="/schedule" component={App} />
         default:
             return <NotFound/>;
     }

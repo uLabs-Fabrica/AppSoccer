@@ -31,7 +31,8 @@ export const createMenu = () =>{
                 },
                 {
                     label: 'Programação',
-                    icon: 'pi pi-fw pi-bars'
+                    icon: 'pi pi-fw pi-bars',
+                    to:'/schedule'
                 },
                 {
                     label: 'Dados médicos',
