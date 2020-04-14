@@ -7,7 +7,7 @@ import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { Dashboard } from '../../pages/Dashboard';
+import { Dashboard } from '../../Pages/Dashboard';
 import { FormsDemo } from '../../components/FormsDemo';
 import { SampleDemo } from '../../components/SampleDemo';
 import { DataDemo } from '../../components/DataDemo';

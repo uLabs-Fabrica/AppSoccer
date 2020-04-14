@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import App from "../Theme";
-import Login from "../../pages/Login";
-import Error from "../../pages/Error";
-import NotFound from "../../pages/NotFound";
-import Access from "../../pages/Access";
+import Login from "../../Pages/Login";
+import Error from "../../Pages/Error";
+import NotFound from "../../Pages/NotFound";
+import Access from "../../Pages/Access";
 
 class Routes extends Component {
     componentDidUpdate(prevProps) {
