@@ -6,10 +6,10 @@ import * as serviceWorker from './serviceWorker';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'prismjs/themes/prism-coy.css';
-
+import UserProvider from './context/User'
 ReactDOM.render(
 	<HashRouter>
-		<Routes></Routes>
+		<UserProvider><Routes></Routes></UserProvider>
 	</HashRouter>,
 	document.getElementById('root')
 );

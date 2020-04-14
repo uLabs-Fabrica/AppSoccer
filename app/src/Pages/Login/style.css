@@ -1,8 +1,42 @@
 .login-body .p-nogutter .left-side img{
     width:370px;
 }
-@media (max-width: 40em){
-    .login-body .p-nogutter .left-side img{
-    width:200px;
+.forgot-password{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
+.box{
+    background-color: white;
+    border-radius: 15px;
+    width:70%;
+    display:flex;
+    flex-direction: column;
+    align-content: space-between;
+}
+.box input{
+    width: 80%;
+}
+.box .grow1{
+    padding:10px;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+}
+.box .grow2{
+    padding:10px;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 2
+}
+@media (max-width: 40em){
+    .box{
+        width:98%;
+    }
+    .login-body .p-nogutter .left-side img{
+        width:200px;
+    }
 }

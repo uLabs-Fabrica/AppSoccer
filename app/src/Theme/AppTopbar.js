@@ -1,58 +1,50 @@
-import React, { Component } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {InputText} from 'primereact/inputtext';
 import {InputSwitch} from 'primereact/inputswitch';
+import {UserContext} from '../context/User'
+import {logout} from '../service/AuthService';
+import {useHistory} from 'react-router-dom';
+import {getSession} from '../service/AuthService';
+function AppTopbar (props){
 
-export class AppTopbar extends Component {
-
-    static defaultProps = {
-        onMenuButtonClick: null,
-        onTopbarMenuButtonClick: null,
-        onTopbarItemClick: null,
-        topbarMenuActive: false,
-        activeTopbarItem: null,
-        darkTheme: null,
-        onThemeChange: null
-    }
-
-    static propTypes = {
-        onMenuButtonClick: PropTypes.func.isRequired,
-        onTopbarMenuButtonClick: PropTypes.func.isRequired,
-        onTopbarItemClick: PropTypes.func.isRequired,
-        topbarMenuActive: PropTypes.bool.isRequired,
-        activeTopbarItem: PropTypes.string,
-        darkTheme: PropTypes.bool,
-        onThemeChange: PropTypes.func
-    }
-
-    constructor() {
-        super();
-        this.state = {};
-    }
-
-    onTopbarItemClick(event, item) {
-        if(this.props.onTopbarItemClick) {
-            this.props.onTopbarItemClick({
+    const history = useHistory();
+    const context = useContext(UserContext);
+    const { saveUser } = useContext(UserContext);
+    useEffect(() => {
+        getSession().then((user) => {
+            saveUser(user);
+        }, (error) => {
+            history.push("/login");
+        })
+    });
+    console.log(context);
+    let topbarItemsClassName = classNames('topbar-menu fadeInDown', {'topbar-menu-visible': props.topbarMenuActive});
+    const onTopbarItemClick = (event, item) =>{
+        if(props.onTopbarItemClick) {
+            props.onTopbarItemClick({
                 originalEvent: event,
                 item: item
             });
         }
     }
+    const clickLogout = () =>{
+        logout().then(()=>{
+            history.push('/login');
+        })
+    }
+    return (
+        <div className="topbar clearfix">
 
-    render() {
-        let topbarItemsClassName = classNames('topbar-menu fadeInDown', {'topbar-menu-visible': this.props.topbarMenuActive});
-
-        return <div className="topbar clearfix">
-
-            <button className="p-link" id="menu-button" onClick={this.props.onMenuButtonClick}>
+            <button className="p-link" id="menu-button" onClick={props.onMenuButtonClick}>
                 <i className="pi pi-bars"></i>
             </button>
 
             <img className="logo" alt="apollo-layout" src="assets/layout/images/logo-horizontal-white.png" />
 
-            <button className="p-link profile" onClick={this.props.onTopbarMenuButtonClick}>
-                <span className="username">Sarah Miller</span>
+            <button className="p-link profile" onClick={props.onTopbarMenuButtonClick}>
+                <span className="username">{context.user.email}</span>
                 <img src="assets/layout/images/avatar/avatar.png" alt="apollo-layout" />
                 <i className="pi pi-angle-down"></i>
             </button>
@@ -63,12 +55,12 @@ export class AppTopbar extends Component {
             </span> */}
 
             <span className="topbar-themeswitcher">
-                <InputSwitch checked={this.props.darkTheme} onChange={this.props.onThemeChange}></InputSwitch>
+                <InputSwitch checked={props.darkTheme} onChange={props.onThemeChange}></InputSwitch>
             </span>
 
             <ul className={topbarItemsClassName}>
-                <li className={classNames({'menuitem-active': this.props.activeTopbarItem === 'profile'})}
-                    onClick={(e) => this.onTopbarItemClick(e, 'profile')}>
+                <li className={classNames({'menuitem-active': props.activeTopbarItem === 'profile'})}
+                    onClick={(e) => onTopbarItemClick(e, 'profile')}>
                     <button className="p-link">
                         <i className="topbar-icon pi pi-fw pi-user"></i>
                         <span className="topbar-item-name">Profile</span>
@@ -94,7 +86,7 @@ export class AppTopbar extends Component {
                             </button>
                         </li>
                         <li role="menuitem">
-                            <button className="p-link">
+                            <button className="p-link" onClick={clickLogout}>
                                 <i className="pi pi-fw pi-power-off"></i>
                                 <span>Logout</span>
                             </button>
@@ -102,8 +94,8 @@ export class AppTopbar extends Component {
                     </ul>
                 </li>
 
-                <li className={classNames({'menuitem-active': this.props.activeTopbarItem === 'settings'})}
-                    onClick={(e) => this.onTopbarItemClick(e, 'settings')}>
+                <li className={classNames({'menuitem-active': props.activeTopbarItem === 'settings'})}
+                    onClick={(e) => onTopbarItemClick(e, 'settings')}>
                     <button className="p-link">
                         <i className="topbar-icon pi pi-fw pi-cog"></i>
                         <span className="topbar-item-name">Settings</span>
@@ -137,8 +129,8 @@ export class AppTopbar extends Component {
                         </li>
                     </ul>
                 </li>
-                <li className={classNames({'menuitem-active': this.props.activeTopbarItem === 'messages'})}
-                    onClick={(e) => this.onTopbarItemClick(e, 'messages')}>
+                <li className={classNames({'menuitem-active': props.activeTopbarItem === 'messages'})}
+                    onClick={(e) => onTopbarItemClick(e, 'messages')}>
                     <button className="p-link">
                         <i className="topbar-icon pi pi-fw pi-envelope"></i>
                         <span className="topbar-item-name">Messages</span>
@@ -177,8 +169,8 @@ export class AppTopbar extends Component {
                         </li>
                     </ul>
                 </li>
-                <li className={classNames({'menuitem-active': this.props.activeTopbarItem === 'notifications'})}
-                    onClick={(e) => this.onTopbarItemClick(e, 'notifications')}>
+                <li className={classNames({'menuitem-active': props.activeTopbarItem === 'notifications'})}
+                    onClick={(e) => onTopbarItemClick(e, 'notifications')}>
                     <button className="p-link">
                         <i className="topbar-icon pi pi-fw pi-bell"></i>
                         <span className="topbar-item-name">Notifications</span>
@@ -212,6 +204,7 @@ export class AppTopbar extends Component {
                     </ul>
                 </li>
             </ul>
-        </div>;
-    }
+        </div>
+    )
 }
+export default AppTopbar;
