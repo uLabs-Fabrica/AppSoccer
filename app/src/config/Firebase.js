@@ -1,4 +1,3 @@
-import React,{useEffect} from 'react';
 import firebase from 'firebase';
 
 let firebaseConfig = {

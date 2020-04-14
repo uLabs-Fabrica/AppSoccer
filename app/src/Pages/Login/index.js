@@ -1,8 +1,7 @@
-import React, { useContext, useCallback, useState, useEffect} from 'react';
+import React, { useContext, useState} from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from "primereact/button";
 import "./style.css";
-import firebase from '../../config/Firebase';
 import {Dialog} from 'primereact/dialog';
 import {auth, changePassword} from '../../service/AuthService';
 import { UserContext } from '../../context/User';
@@ -84,13 +83,13 @@ function Login () {
                     </div>
                 </div>
             </Sidebar>
-            <Dialog header={alert.title} visible={alert.label!=''} style={{ width: '50vw' }} modal={true} onHide={() => setAlert({label:''})}>
+            <Dialog header={alert.title} visible={alert.label!==''} style={{ width: '50vw' }} modal={true} onHide={() => setAlert({label:''})}>
                {alert.label}
             </Dialog>
             <div className="body-container">
                 <div className="p-grid p-nogutter">
                     <div className="p-col-12 p-lg-6 left-side">
-                        <img src="assets/layout/images/logo.png" className="logo" />
+                        <img src="assets/layout/images/logo.png" alt ="" className="logo" />
                         <h1>Bem-vindo</h1>
                         {/* <p>
                             Sign in to start your session

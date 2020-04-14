@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useEffect, useUpdate} from 'react';
+import React, { useContext,  useState} from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from "primereact/button";
 import "./style.css";
@@ -8,7 +8,6 @@ import { InputMask} from 'primereact/inputmask';
 import axios from 'axios';
 import 'react-image-crop/dist/ReactCrop.css';
 import Cropper from '../../components/Cropper';
-import firebase from '../../config/Firebase';
 
 function PersonalData() {
     const context = useContext(UserContext);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button } from "primereact/button";
 import {useHistory} from 'react-router-dom';
 

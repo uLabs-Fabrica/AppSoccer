@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import  AppTopbar  from './AppTopbar';
 import { AppBreadcrumb } from './AppBreadcrumb';
@@ -19,7 +19,6 @@ import { ChartsDemo } from '../components/ChartsDemo';
 import { MiscDemo } from '../components/MiscDemo';
 import { EmptyPage } from '../components/EmptyPage';
 import { Documentation } from '../components/Documentation';
-import { ProgressBar } from 'primereact/components/progressbar/ProgressBar';
 import 'primereact/resources/primereact.min.css';
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/daygrid/main.css';

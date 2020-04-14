@@ -1,30 +1,19 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { CarService } from '../../service/CarService';
+import React, { useState} from 'react';
 import { Panel } from 'primereact/components/panel/Panel';
-import { Checkbox } from 'primereact/components/checkbox/Checkbox';
-import { Button } from 'primereact/components/button/Button';
-import { Dropdown } from 'primereact/components/dropdown/Dropdown';
-import { InputText } from 'primereact/components/inputtext/InputText';
-import { InputTextarea } from 'primereact/components/inputtextarea/InputTextarea';
 import { DataTable } from 'primereact/components/datatable/DataTable';
 import { Column } from 'primereact/components/column/Column';
 import { Chart } from 'primereact/chart';
-import { ProgressBar } from 'primereact/progressbar';
-import { Menu } from 'primereact/menu';
 import { FullCalendar } from 'primereact/fullcalendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { getSession } from '../../service/AuthService';
-import {useHistory} from 'react-router-dom';
-import {UserContext} from '../../context/User';
 export function Dashboard(props) {
-    const history = useHistory();
-    const { saveUser } = useContext(UserContext);
-    const [tasks, setTasks] = useState([]);
-    const [city, setCity] = useState(null);
-    const [selectedCar, setSelectCar] = useState(null);
-    const [fullcalendarOptions, setFullcalendarOptions] = useState({
+    // const history = useHistory();
+    // const { saveUser } = useContext(UserContext);
+    // const [tasks, setTasks] = useState([]);
+    // const [city, setCity] = useState(null);
+    const [selectedCar] = useState(null);
+    const [fullcalendarOptions] = useState({
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         defaultDate: '2017-02-01',
         header: {
@@ -33,7 +22,7 @@ export function Dashboard(props) {
             right: 'month,agendaWeek,agendaDay'
         }
     })
-    const [events, setEvents] = useState([
+    const [events] = useState([
         {
             "id": 1,
             "title": "All Day Event",
@@ -99,7 +88,7 @@ export function Dashboard(props) {
             "start": "2017-02-28"
         }
     ])
-    const [chartData, setChartData] = useState({
+    const [chartData] = useState({
         labels: ['Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro', 'Fevereiro', 'Março'],
         datasets: [
             {
@@ -128,7 +117,7 @@ export function Dashboard(props) {
             }
         ]
     })
-    const [cars, setCars] = useState(
+    const [cars] = useState(
         [
             { "brand": "Volkswagen", "year": 2012, "color": "White", "vin": "dsad231ff" },
             { "brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345" },

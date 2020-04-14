@@ -1,11 +1,11 @@
-import React, { useContext, useCallback, useState, useEffect, useUpdate } from 'react';
+import React,  {useState } from 'react';
 import { DataTable } from 'primereact/components/datatable/DataTable';
 import { Column } from 'primereact/components/column/Column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
 function PersonalData() {
-    const [selectedCar, setSelectCar] = useState(null);
+    const [selectedCar] = useState(null);
     const [list, setList] = useState(true); 
     const [sports, setSports] = useState(
         [

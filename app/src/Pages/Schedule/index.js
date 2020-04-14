@@ -1,14 +1,9 @@
-import React, { useContext, useCallback, useState, useEffect, useUpdate } from 'react';
+import React, { useState} from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from "primereact/button";
 //import "./style.css";
-import { UserContext } from '../../context/User';
-import { FileUpload } from 'primereact/fileupload';
 import { InputMask } from 'primereact/inputmask';
-import axios from 'axios';
 import 'react-image-crop/dist/ReactCrop.css';
-import Cropper from '../../components/Cropper';
-import firebase from '../../config/Firebase';
 
 import { FullCalendar } from 'primereact/fullcalendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -18,7 +13,6 @@ import ptBr from '@fullcalendar/core/locales/pt-br';
 import { Panel } from 'primereact/components/panel/Panel';
 import { Calendar } from 'primereact/calendar';
 import moment from 'moment/moment';
-import { Checkbox} from 'primereact/checkbox';
 
 function Schedule() {
     const [list, setList] = useState(true);
@@ -40,7 +34,7 @@ function Schedule() {
         console.log(event);
         setList(false);
     }
-    const [fullcalendarOptions, setFullcalendarOptions] = useState({
+    const [fullcalendarOptions] = useState({
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         defaultDate: new Date(),
         locale: ptBr,
@@ -54,7 +48,7 @@ function Schedule() {
         },
         eventClick:eventClick
     })
-    const [events, setEvents] = useState([
+    const [events] = useState([
         {
             "id": 2,
             "title": "Clube 04",

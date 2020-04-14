@@ -1,7 +1,5 @@
-import React, { useState,useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useContext } from 'react';
 import classNames from 'classnames';
-import {InputText} from 'primereact/inputtext';
 import {InputSwitch} from 'primereact/inputswitch';
 import {UserContext} from '../context/User'
 import {logout} from '../service/AuthService';
