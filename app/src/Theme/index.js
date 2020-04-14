@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import classNames from 'classnames';
-import { AppTopbar } from './AppTopbar';
+import  AppTopbar  from './AppTopbar';
 import { AppBreadcrumb } from './AppBreadcrumb';
 import { AppFooter } from './AppFooter';
 import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { Dashboard } from '../../Pages/Dashboard';
-import { FormsDemo } from '../../components/FormsDemo';
-import { SampleDemo } from '../../components/SampleDemo';
-import { DataDemo } from '../../components/DataDemo';
-import { PanelsDemo } from '../../components/PanelsDemo';
-import { OverlaysDemo } from '../../components/OverlaysDemo';
-import { MenusDemo } from '../../components/MenusDemo';
-import { MessagesDemo } from '../../components/MessagesDemo';
-import { ChartsDemo } from '../../components/ChartsDemo';
-import { MiscDemo } from '../../components/MiscDemo';
-import { EmptyPage } from '../../components/EmptyPage';
-import { Documentation } from '../../components/Documentation';
+import { Dashboard } from '../pages/Dashboard';
+import { FormsDemo } from '../components/FormsDemo';
+import { SampleDemo } from '../components/SampleDemo';
+import { DataDemo } from '../components/DataDemo';
+import { PanelsDemo } from '../components/PanelsDemo';
+import { OverlaysDemo } from '../components/OverlaysDemo';
+import { MenusDemo } from '../components/MenusDemo';
+import { MessagesDemo } from '../components/MessagesDemo';
+import { ChartsDemo } from '../components/ChartsDemo';
+import { MiscDemo } from '../components/MiscDemo';
+import { EmptyPage } from '../components/EmptyPage';
+import { Documentation } from '../components/Documentation';
 import { ProgressBar } from 'primereact/components/progressbar/ProgressBar';
 import 'primereact/resources/primereact.min.css';
 import '@fullcalendar/core/main.css';
@@ -27,11 +27,17 @@ import '@fullcalendar/timegrid/main.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './style.css';
+import {createMenu} from '../service/MenuService'; 
+import PersonalData from '../pages/PersonalData';
+import SportsData from '../pages/SportsData';
+import Schedule from '../pages/Schedule';
 
 class App extends Component {
+    //static contextType = MenuContext
     constructor() {
         console.log("app.js");
         super();
+        console.log(createMenu());
         this.state = {
             layoutMode: 'static',
             overlayMenuActive: false,
@@ -44,7 +50,6 @@ class App extends Component {
             themeColor: 'blue',
             configDialogActive: false
         };
-
         this.onDocumentClick = this.onDocumentClick.bind(this);
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onMenuButtonClick = this.onMenuButtonClick.bind(this);
@@ -59,7 +64,8 @@ class App extends Component {
         this.onConfigButtonClick = this.onConfigButtonClick.bind(this);
         this.onConfigCloseClick = this.onConfigCloseClick.bind(this);
         this.onConfigClick = this.onConfigClick.bind(this);
-        this.createMenu();
+        //this.createMenu();
+        this.menu = createMenu();
     }
 
     onMenuClick(event) {
@@ -263,124 +269,10 @@ class App extends Component {
         }
     }
 
-    createMenu() {
-        this.menu = [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
-            {
-                label: 'Perfil', icon: 'pi pi-fw pi-bars',
-                items: [
-                    {
-                        label: 'Dados pessoais',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Dados esportivos',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Dados médicos',
-                        icon: 'pi pi-fw pi-bars'
-                    }
-                ]
-            },
-            {
-                label: 'Treinamento', icon: 'pi pi-fw pi-bars',
-                items: [
-                    {
-                        label: 'Frequência',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Programação',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Dados médicos',
-                        icon: 'pi pi-fw pi-bars'
-                    }
-                ]
-            },
-            {
-                label: 'Competições', icon: 'pi pi-fw pi-bars',
-                items: [
-                    {
-                        label: 'Campeonatos',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Jogos',
-                        icon: 'pi pi-fw pi-bars'
-                    }
-                ]
-            },
-            {
-                label: 'Desempenho', icon: 'pi pi-fw pi-bars',
-                items: [
-                    {
-                        label: 'Competições',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Treinamentos',
-                        icon: 'pi pi-fw pi-bars'
-                    },
-                    {
-                        label: 'Prontuário',
-                        icon: 'pi pi-fw pi-bars'
-                    }
-                ]
-            },
-            { label: 'Contratos', icon: 'pi pi-fw pi-bars' },
-            {
-                label: 'Tema', icon: 'pi pi-fw pi-palette',
-                items: [
-                    {
-                        label: 'Blue', icon: 'pi pi-fw pi-palette', styleClass: 'blue-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'blue-light' })
-                        }
-                    },
-                    {
-                        label: 'Green', icon: 'pi pi-fw pi-palette', styleClass: 'green-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'green-light' })
-                        }
-                    },
-                    {
-                        label: 'Cyan', icon: 'pi pi-fw pi-palette', styleClass: 'cyan-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'cyan-light' })
-                        }
-                    },
-                    {
-                        label: 'Purple', icon: 'pi pi-fw pi-palette', styleClass: 'purple-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'purple-light' })
-                        }
-                    },
-                    {
-                        label: 'Indigo', icon: 'pi pi-fw pi-palette', styleClass: 'indigo-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'indigo-light' })
-                        }
-                    },
-                    {
-                        label: 'Yellow', icon: 'pi pi-fw pi-palette', styleClass: 'yellow-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'yellow-light' })
-                        }
-                    },
-                    {
-                        label: 'Orange', icon: 'pi pi-fw pi-palette', styleClass: 'orange-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'orange-light' })
-                        }
-                    },
-                    {
-                        label: 'Pink', icon: 'pi pi-fw pi-palette', styleClass: 'pink-theme', command: (event) => {
-                            this.changeTheme({ originalEvent: event, theme: 'pink-light' })
-                        }
-                    }
-
-                ]
-            },
-        ];
-    }
-
     render() {
+        //const menu = useContext(MenuContext);
+        console.log("menu");
+        //console.log(menu);
         const layoutClassName = classNames('layout-wrapper', {
             'layout-horizontal': this.state.layoutMode === 'horizontal',
             'layout-overlay': this.state.layoutMode === 'overlay',
@@ -415,7 +307,10 @@ class App extends Component {
 
                     <div className="layout-content-container">
                         <Route path="/dashboard" exact component={Dashboard} />
-                        <Route path="/forms" component={FormsDemo} />
+                        <Route path="/forms" exact component={FormsDemo} />
+                        <Route path="/personal-data" exact component={PersonalData} />
+                        <Route path="/sports-data" exact component={SportsData} />
+                        <Route path="/schedule" exact component={Schedule} />
                         <Route path="/sample" component={SampleDemo} />
                         <Route path="/data" component={DataDemo} />
                         <Route path="/panels" component={PanelsDemo} />
