@@ -72,7 +72,7 @@ jobs:
 
     - name: restore
       working-directory: ./app
-      run: npm install
+      run: CI=false && npm install
     
     - name: build
       working-directory: ./app
