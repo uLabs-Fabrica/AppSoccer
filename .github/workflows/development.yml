@@ -66,13 +66,17 @@ jobs:
         echo Add other actions to build,
         echo test, and deploy your project.
     
+    - name: Clear cache
+      working-directory: ./app
+      run: npm cache clean --force
+
     - name: restore
       working-directory: ./app
       run: npm install
     
     - name: build
       working-directory: ./app
-      run: npm run build
+      run: npm run build 
     
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.1   
