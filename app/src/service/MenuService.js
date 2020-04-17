@@ -27,7 +27,8 @@ export const createMenu = () =>{
             items: [
                 {
                     label: 'Frequência',
-                    icon: 'pi pi-fw pi-bars'
+                    icon: 'pi pi-fw pi-bars',
+                    to: '/frequency'
                 },
                 {
                     label: 'Programação',

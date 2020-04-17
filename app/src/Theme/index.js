@@ -30,6 +30,7 @@ import {createMenu} from '../service/MenuService';
 import PersonalData from '../Pages/PersonalData';
 import SportsData from '../Pages/SportsData';
 import Schedule from '../Pages/Schedule';
+import Frequency from '../Pages/Frequency';
 
 class App extends Component {
     //static contextType = MenuContext
@@ -306,20 +307,11 @@ class App extends Component {
 
                     <div className="layout-content-container">
                         <Route path="/dashboard" exact component={Dashboard} />
-                        <Route path="/forms" exact component={FormsDemo} />
                         <Route path="/personal-data" exact component={PersonalData} />
                         <Route path="/sports-data" exact component={SportsData} />
                         <Route path="/schedule" exact component={Schedule} />
-                        <Route path="/sample" component={SampleDemo} />
-                        <Route path="/data" component={DataDemo} />
-                        <Route path="/panels" component={PanelsDemo} />
-                        <Route path="/overlays" component={OverlaysDemo} />
-                        < Route path="/menus" component={MenusDemo} />
-                        <Route path="/messages" component={MessagesDemo} />
-                        <Route path="/charts" component={ChartsDemo} />
-                        <Route path="/misc" component={MiscDemo} />
-                        <Route path="/empty" component={EmptyPage} />
-                        <Route path="/documentation" component={Documentation} />
+                        <Route path="/frequency" exact component={Frequency} />
+                        
                     </div>
 
                     <AppFooter />
