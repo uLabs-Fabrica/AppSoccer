@@ -30,7 +30,6 @@ function Organization() {
         setList(true);
     }
     const organizationLogo = (row) =>{
-        console.log(row);
         return(
             <img width="50%" src={row.logo} />
         )

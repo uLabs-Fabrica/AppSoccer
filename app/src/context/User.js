@@ -6,7 +6,6 @@ const UserProvider = ({children}) =>{
         {}
     );
     const saveUser = user => {
-        console.log(user);
         setUser(user);
     }
     return (

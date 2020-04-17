@@ -17,7 +17,6 @@ function AppTopbar (props){
             history.push("/login");
         })
     });
-    console.log(context);
     let topbarItemsClassName = classNames('topbar-menu fadeInDown', {'topbar-menu-visible': props.topbarMenuActive});
     const onTopbarItemClick = (event, item) =>{
         if(props.onTopbarItemClick) {
