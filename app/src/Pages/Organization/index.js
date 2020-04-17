@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Panel } from 'primereact/components/panel/Panel';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
