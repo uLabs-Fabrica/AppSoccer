@@ -4,7 +4,7 @@ import { Column } from 'primereact/components/column/Column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
-function PersonalData() {
+function SportsData() {
     const [selectedCar] = useState(null);
     const [list, setList] = useState(true); 
     const [sports, setSports] = useState(
@@ -20,11 +20,9 @@ function PersonalData() {
     }
     const saveSports = (e)=>{
         e.preventDefault();
-        console.log(newSport);
         setSports(
             [...sports, newSport]
         )
-        console.log(sports);
         setList(true);
     }
     return(
@@ -74,4 +72,4 @@ function PersonalData() {
         </div>
     )
 }
-export default PersonalData;
+export default SportsData;

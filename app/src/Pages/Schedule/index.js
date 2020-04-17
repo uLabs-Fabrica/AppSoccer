@@ -31,13 +31,7 @@ function Schedule() {
         { label: "Atacante", value: "Atacante" },
         { label: "Zagueiro", value: "Zagueiro" },
     ])
-    console.log(event);
     const eventClick = (date)=>{
-        console.log(date);
-        console.log(date.event.id);
-        console.log(date.event.start);
-        console.log(date.local);
-        console.log(events);
         let event = events.filter((item)=>{
             if(item.id == date.event.id){
                 return true;
@@ -45,7 +39,6 @@ function Schedule() {
         })
         event[0].date = moment(event[0].date).format("DD/MM/YYYY");
         setEvent(event[0]);
-        console.log(event);
         setList(false);
     }
     const [fullcalendarOptions] = useState({
@@ -73,7 +66,6 @@ function Schedule() {
         }
     ])
     const newTreinament = () => {
-        console.log("newTreinament");
         setList(false);
         setEvent({});
     }
@@ -82,9 +74,6 @@ function Schedule() {
             value = moment(value).format("DD/MM/YYYY");
         }
         event[ref] = value;
-        console.log(value);
-
-        console.log(event);
         setEvent(event);
     }
     const changeNewActivity = (ref, value) =>{
@@ -94,29 +83,22 @@ function Schedule() {
     const saveEvent = (e) =>{
         e.preventDefault();
     }
-    console.log(event);
     const saveActivity = (e) =>{
         e.preventDefault();
-        console.log(newActivity);
         if(!event.activities){
             event.activities = [newActivity];
         }else{
             event.activities.push(newActivity);
         }
         setEvent(event);
-        console.log(event);
         setNewActivity(false);
     }
     const removeActivity = (row)=>{
-        console.log(row);
         event.activities = event.activities.filter((item)=>{
-            console.log(item);
-            console.log(row);
             if(item != row){
                 return true;
             }
         })
-        console.log(event);
         setEvent(event);
     }
     const actionButton = (row) =>{

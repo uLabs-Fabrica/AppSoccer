@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Button } from "primereact/button";
-//import "./style.css";
-import { InputMask } from 'primereact/inputmask';
 import { Panel } from 'primereact/components/panel/Panel';
-//import { Calendar } from 'primereact/calendar';
 import moment from 'moment/moment';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -16,7 +11,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import ptBr from '@fullcalendar/core/locales/pt-br';
 import { InputTextarea } from 'primereact/inputtextarea';
 function Frequency() {
-    //(foto, nome, posição + botão para definir o status + observação)
     const [date,setDate] = useState(null);
     const [players] = useState([
         { avatar: "", name:"Rogério", position:"Goleiro", status:"", note:""},
@@ -29,7 +23,6 @@ function Frequency() {
         {label:"Viagem", value:"Viagem"}
     ])
     const dateClick = (day) =>{
-        console.log(date)
         setDate(day.date);
     }
     const [categories] = useState([

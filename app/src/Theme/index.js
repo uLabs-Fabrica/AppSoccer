@@ -31,6 +31,7 @@ import PersonalData from '../Pages/PersonalData';
 import SportsData from '../Pages/SportsData';
 import Schedule from '../Pages/Schedule';
 import Frequency from '../Pages/Frequency';
+import Organization from '../Pages/Organization';
 
 class App extends Component {
     //static contextType = MenuContext
@@ -311,7 +312,7 @@ class App extends Component {
                         <Route path="/sports-data" exact component={SportsData} />
                         <Route path="/schedule" exact component={Schedule} />
                         <Route path="/frequency" exact component={Frequency} />
-                        
+                        <Route path="/organization" exact component={Organization} />
                     </div>
 
                     <AppFooter />
