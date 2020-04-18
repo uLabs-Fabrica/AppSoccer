@@ -58,6 +58,11 @@ export const createMenu = () =>{
                     to: '/organization'
                 },
                 {
+                    label: 'Campeonatos',
+                    icon: 'pi pi-fw pi-bars',
+                    to: '/championship'
+                },
+                {
                     label: 'Equipes',
                     icon: 'pi pi-fw pi-bars',
                     to: '/teams'

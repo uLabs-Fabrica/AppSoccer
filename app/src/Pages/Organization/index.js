@@ -40,7 +40,7 @@ function Organization() {
             {list &&
                 <div>
                     <DataTable value={organizations} className="p-datatable-borderless" style={{ marginBottom: '20px' }} responsive={true}
-                        selectionMode="single" selection={selectedCar} onSelectionChange={(e) => this.setState({ selectedCar: e.value })}>
+                        selectionMode="single" selection={selectedCar} >
                         <Column field="name" header="Nome" sortable={true} />
                         <Column field="site" header="Site" sortable={true} />
                         <Column field="telephone" header="Telefone" sortable={true} />
@@ -68,7 +68,7 @@ function Organization() {
                                 <InputText required type="email" defaultValue={newOrganization.email} onChange={e => onChange("email", e.target.value)} placeholder="Email" />
                             </div>
                             <div className="p-md-6">
-                            <FileUpload mode="basic" chooseLabel="Insira um logo" multiple={true} maxFileSize={2000000} onSelect={e => onChange("logo", e)} />
+                                <FileUpload mode="basic" chooseLabel="Insira um logo" multiple={true} maxFileSize={2000000} onSelect={e => onChange("logo", e)} />
                             </div>
                         </div>
                         <Button label="Salvar" type="submit" className="p-button-success" />

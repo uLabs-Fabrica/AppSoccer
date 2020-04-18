@@ -40,7 +40,7 @@ function Teams() {
             {list &&
                 <div>
                     <DataTable value={teams} className="p-datatable-borderless" style={{ marginBottom: '20px' }} responsive={true}
-                        selectionMode="single" selection={selectedTeam} onSelectionChange={(e) => this.setState({ selectedTeam: e.value })}>
+                        selectionMode="single" selection={selectedTeam}>
                         <Column field="name" header="Nome" sortable={true} />
                         <Column field="site" header="Site" sortable={true} />
                         <Column field="city" header="Cidade" sortable={true} />

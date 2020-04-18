@@ -33,6 +33,7 @@ import Schedule from '../Pages/Schedule';
 import Frequency from '../Pages/Frequency';
 import Organization from '../Pages/Organization';
 import Teams from '../Pages/Teams';
+import Championship from '../Pages/Championship';
 class App extends Component {
     //static contextType = MenuContext
     constructor() {
@@ -272,7 +273,6 @@ class App extends Component {
 
     render() {
         //const menu = useContext(MenuContext);
-        console.log("menu");
         //console.log(menu);
         const layoutClassName = classNames('layout-wrapper', {
             'layout-horizontal': this.state.layoutMode === 'horizontal',
@@ -314,6 +314,7 @@ class App extends Component {
                         <Route path="/frequency" exact component={Frequency} />
                         <Route path="/organization" exact component={Organization} />
                         <Route path="/teams" exact component={Teams} />
+                        <Route path="/championship" exact component={Championship} />
                     </div>
 
                     <AppFooter />
