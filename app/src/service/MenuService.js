@@ -45,12 +45,9 @@ export const createMenu = () =>{
             label: 'Competições', icon: 'pi pi-fw pi-bars',
             items: [
                 {
-                    label: 'Campeonatos',
-                    icon: 'pi pi-fw pi-bars'
-                },
-                {
                     label: 'Jogos',
-                    icon: 'pi pi-fw pi-bars'
+                    icon: 'pi pi-fw pi-bars',
+                    to:"/games"
                 },
                 {
                     label: 'Organizadores',

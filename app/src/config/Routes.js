@@ -33,6 +33,8 @@ function Routes (props) {
             return <Route path="/teams" component={App} />
         case "/championship":
             return <Route path="/championship" component={App} />
+        case "/games":
+            return <Route path="/games" component={App} />
         default:
             return <NotFound/>;
     }
