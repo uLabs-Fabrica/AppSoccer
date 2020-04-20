@@ -71,7 +71,8 @@ export const createMenu = () =>{
             items: [
                 {
                     label: 'Competições',
-                    icon: 'pi pi-fw pi-bars'
+                    icon: 'pi pi-fw pi-bars',
+                    to:'/competitions'
                 },
                 {
                     label: 'Treinamentos',

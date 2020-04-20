@@ -35,6 +35,7 @@ import Organization from '../Pages/Organization';
 import Teams from '../Pages/Teams';
 import Championship from '../Pages/Championship';
 import Games from '../Pages/Games';
+import Competitions from '../Pages/Competitions';
 class App extends Component {
     //static contextType = MenuContext
     constructor() {
@@ -317,6 +318,7 @@ class App extends Component {
                         <Route path="/teams" exact component={Teams} />
                         <Route path="/championship" exact component={Championship} />
                         <Route path="/games" exact component={Games} />
+                        <Route path="/competitions" exact component={Competitions} />
                     </div>
 
                     <AppFooter />
