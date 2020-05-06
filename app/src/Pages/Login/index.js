@@ -6,6 +6,7 @@ import {Dialog} from 'primereact/dialog';
 import {auth, changePassword} from '../../service/AuthService';
 import { UserContext } from '../../context/User';
 import { Sidebar } from 'primereact/sidebar';
+import { useHistory } from 'react-router-dom';
 
 function Login () {
     const [email, setInput] = useState('');
@@ -13,6 +14,7 @@ function Login () {
     const [alert, setAlert] = useState({title:'', label:''});
     const [visible, setVisible] = useState(false);
     const { saveUser } = useContext(UserContext);
+    const history = useHistory();
     const autentication = ()=>{
         console.log(email, password);
         if(email === ''){
@@ -23,25 +25,11 @@ function Login () {
             setAlert({title:"Atenção",label:"Senha obrigatória"});
             return;
         }
-        
         auth(email,password).then((user)=>{
-            console.log(user);
             saveUser(user);
-            //     const db =  firebase.firestore();
-            //     let uid = resp.user.uid;
-            //     let ref = db.collection('roles').doc("BxJj5DlzaOYWnfGpo5g4g0Kp88Q2");
-            //     ref.get().then(doc => {
-            //         if (!doc.exists) {
-            //             console.log('No such document!');
-            //         } else {
-            //             console.log('Document data:', doc.data());
-            //         }
-            //     })
-            //     .catch(err => {
-            //         console.log('Error getting document', err);
-            //     });
-            window.location = "/#/dashboard";
+            history.push("/dashboard");
         }, (error)=>{
+            console.log(error);
             setAlert({title:"Erro",label:error});
         })
     }

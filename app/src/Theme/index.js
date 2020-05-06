@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
 import classNames from 'classnames';
 import  AppTopbar  from './AppTopbar';
 import { AppBreadcrumb } from './AppBreadcrumb';
@@ -8,17 +8,6 @@ import { AppConfig } from './AppConfig';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
 import { Dashboard } from '../Pages/Dashboard';
-import { FormsDemo } from '../components/FormsDemo';
-import { SampleDemo } from '../components/SampleDemo';
-import { DataDemo } from '../components/DataDemo';
-import { PanelsDemo } from '../components/PanelsDemo';
-import { OverlaysDemo } from '../components/OverlaysDemo';
-import { MenusDemo } from '../components/MenusDemo';
-import { MessagesDemo } from '../components/MessagesDemo';
-import { ChartsDemo } from '../components/ChartsDemo';
-import { MiscDemo } from '../components/MiscDemo';
-import { EmptyPage } from '../components/EmptyPage';
-import { Documentation } from '../components/Documentation';
 import 'primereact/resources/primereact.min.css';
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/daygrid/main.css';
@@ -27,6 +16,7 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import './style.css';
 import {createMenu} from '../service/MenuService'; 
+import Menu from '../service/MenuService'; 
 import PersonalData from '../Pages/PersonalData';
 import SportsData from '../Pages/SportsData';
 import Schedule from '../Pages/Schedule';
@@ -36,187 +26,139 @@ import Teams from '../Pages/Teams';
 import Championship from '../Pages/Championship';
 import Games from '../Pages/Games';
 import Competitions from '../Pages/Competitions';
-class App extends Component {
+import { UserContext } from '../context/User';
+function App(props) {
     //static contextType = MenuContext
-    constructor() {
-        console.log("app.js");
-        super();
-        console.log(createMenu());
-        this.state = {
-            layoutMode: 'static',
-            overlayMenuActive: false,
-            staticMenuDesktopInactive: false,
-            staticMenuMobileActive: false,
-            topbarMenuActive: false,
-            activeTopbarItem: null,
-            darkTheme: false,
-            menuActive: false,
-            themeColor: 'blue',
-            configDialogActive: false
-        };
-        this.onDocumentClick = this.onDocumentClick.bind(this);
-        this.onMenuClick = this.onMenuClick.bind(this);
-        this.onMenuButtonClick = this.onMenuButtonClick.bind(this);
-        this.onTopbarMenuButtonClick = this.onTopbarMenuButtonClick.bind(this);
-        this.onThemeChange = this.onThemeChange.bind(this);
-        this.onTopbarItemClick = this.onTopbarItemClick.bind(this);
-        this.onMenuItemClick = this.onMenuItemClick.bind(this);
-        this.onRootMenuItemClick = this.onRootMenuItemClick.bind(this);
-        this.changeMenuMode = this.changeMenuMode.bind(this);
-        this.changeMenuColor = this.changeMenuColor.bind(this);
-        this.changeTheme = this.changeTheme.bind(this);
-        this.onConfigButtonClick = this.onConfigButtonClick.bind(this);
-        this.onConfigCloseClick = this.onConfigCloseClick.bind(this);
-        this.onConfigClick = this.onConfigClick.bind(this);
-        //this.createMenu();
-        this.menu = createMenu();
+    const [layoutMode, setLayoutMode] = useState('static');
+    const [overlayMenuActive, setOverlayMenuActive] = useState(false);
+    const [staticMenuDesktopInactive, setStaticMenuDesktopInactive] = useState(false);
+    const [staticMenuMobileActive, setStaticMenuMobileActive] = useState(false);
+    const [topbarMenuActive, setTopbarMenuActive] = useState(false);
+    const [activeTopbarItem, setActiveTopbarItem] = useState(null);
+    const [darkTheme, setDarkTheme] = useState(false);
+    const [menuActive, setMenuActive] = useState(false);
+    const [themeColor, setThemeColor] = useState('blue');
+    const [configDialogActive, setConfigDialogActive] = useState(false);
+    const [menu, setMenu] =  useState(null);
+    let menuClick = null;
+    let topbarItemClick = null;
+    let onConfigButtonClick = null;
+    let configClick = null;
+    
+    
+    const context = useContext(UserContext);
+    let user = context.user;
+    //alert("mymenu");
+    console.log(user);
+    const getMenu = (data) =>{
+        setMenu(data);
     }
-
-    onMenuClick(event) {
-        this.menuClick = true;
+    Menu({menu:menu,callback:getMenu});
+    console.log(Menu);
+    const onMenuClick = (event) => {
+        menuClick = true;
     }
-
-    onMenuButtonClick(event) {
-        this.menuClick = true;
-        this.setState(({
-            topbarMenuActive: false
-        }));
-
-        if (this.state.layoutMode === 'overlay' && !this.isMobile()) {
-            this.setState({
-                overlayMenuActive: !this.state.overlayMenuActive
-            });
+    const onMenuButtonClick = (event) => {
+        menuClick = true;
+        setTopbarMenuActive(false)
+        if (layoutMode === 'overlay' && !isMobile()) {
+            setOverlayMenuActive(!overlayMenuActive)
         } else {
-            if (this.isDesktop())
-                this.setState({ staticMenuDesktopInactive: !this.state.staticMenuDesktopInactive });
+            if (isDesktop())
+                setStaticMenuDesktopInactive(!staticMenuDesktopInactive);
             else
-                this.setState({ staticMenuMobileActive: !this.state.staticMenuMobileActive });
+                setStaticMenuMobileActive(!staticMenuMobileActive)
         }
-
         event.preventDefault();
     }
-
-    onTopbarMenuButtonClick(event) {
-        this.topbarItemClick = true;
-        this.setState({ topbarMenuActive: !this.state.topbarMenuActive });
-        this.hideOverlayMenu();
+    const onTopbarMenuButtonClick = (event) => {
+        topbarItemClick = true;
+        setTopbarMenuActive(!topbarMenuActive);
+        hideOverlayMenu();
         event.preventDefault();
     }
-
-    onTopbarItemClick(event) {
-        this.topbarItemClick = true;
-
-        if (this.state.activeTopbarItem === event.item)
-            this.setState({ activeTopbarItem: null });
+    const onTopbarItemClick = (event) => {
+        topbarItemClick = true;
+        if (activeTopbarItem === event.item)
+            setActiveTopbarItem(null);
         else
-            this.setState({ activeTopbarItem: event.item });
-
+            setActiveTopbarItem(event.item);
         event.originalEvent.preventDefault();
     }
-
-    onMenuItemClick(event) {
+    const onMenuItemClick = (event) => {
         if (!event.item.items) {
-            this.hideOverlayMenu();
+            hideOverlayMenu();
         }
-        if (!event.item.items && (this.isHorizontal() || this.isSlim())) {
-            this.setState({
-                menuActive: false
-            })
+        if (!event.item.items && (isHorizontal() || isSlim())) {
+            setMenuActive(false);
         }
     }
-
-    onRootMenuItemClick(event) {
-        this.setState({
-            menuActive: !this.state.menuActive
-        });
+    const onRootMenuItemClick = (event) => {
+        setMenuActive(!menuActive);
     }
-
-    onConfigButtonClick(event) {
-        this.configClick = true;
-        this.setState({ configDialogActive: !this.state.configDialogActive })
+    onConfigButtonClick = (event) => {
+        configClick = true;
+        setConfigDialogActive(!configDialogActive);
     }
-
-    onConfigCloseClick() {
-        this.setState({ configDialogActive: false })
+    const onConfigCloseClick = () => {
+        setConfigDialogActive(false);
     }
-
-    onConfigClick() {
-        this.configClick = true;
+    const onConfigClick = () => {
+        configClick = true;
     }
-
-    onDocumentClick(event) {
-        if (!this.topbarItemClick) {
-            this.setState({
-                activeTopbarItem: null,
-                topbarMenuActive: false
-            });
+    const onDocumentClick = (event) => {
+        if (!topbarItemClick) {
+            setActiveTopbarItem(null);
+            setTopbarMenuActive(false);
         }
-
-        if (!this.configClick) {
-            this.setState({ configDialogActive: false });
+        if (!configClick) {
+            setConfigDialogActive(false);
         }
-
-        if (!this.menuClick) {
-            if (this.isHorizontal() || this.isSlim()) {
-                this.setState({
-                    menuActive: false
-                })
+        if (!menuClick) {
+            if (isHorizontal() || isSlim()) {
+                setMenuActive(false);
             }
 
-            this.hideOverlayMenu();
+            hideOverlayMenu();
         }
-
-        this.topbarItemClick = false;
-        this.menuClick = false;
-        this.configClick = false;
+        topbarItemClick = false;
+        menuClick = false;
+        configClick = false;
     }
-
-    hideOverlayMenu() {
-        this.setState({
-            overlayMenuActive: false,
-            staticMenuMobileActive: false
-        })
+    const hideOverlayMenu = () => {
+        setOverlayMenuActive(false);
+        setStaticMenuMobileActive(false);
     }
-
-    isTablet() {
+    const isTablet = () => {
         let width = window.innerWidth;
         return width <= 1024 && width > 640;
     }
-
-    isDesktop() {
+    const isDesktop = () => {
         return window.innerWidth > 1024;
     }
-
-    isMobile() {
+    const isMobile = () => {
         return window.innerWidth <= 640;
     }
-
-    isOverlay() {
-        return this.state.layoutMode === 'overlay';
+    const isOverlay = () => {
+        return layoutMode === 'overlay';
     }
 
-    isHorizontal() {
-        return this.state.layoutMode === 'horizontal';
+    const isHorizontal = () =>{
+        return layoutMode === 'horizontal';
     }
-
-    isSlim() {
-        return this.state.layoutMode === 'slim';
+    const isSlim = () => {
+        return layoutMode === 'slim';
     }
-
-    changeMenuMode(event) {
-        this.setState({
-            layoutMode: event.menuMode,
-            staticMenuDesktopInactive: false,
-            overlayMenuActive: false
-        });
+    const changeMenuMode = (event) => {
+        setLayoutMode(event.menuMode);
+        setStaticMenuDesktopInactive(false);
+        setOverlayMenuActive(false);
     }
-
-    changeMenuColor(event) {
-        this.setState({ darkTheme: event.darkTheme })
-        this.onThemeChange();
+    const changeMenuColor = (event) => {
+        setDarkTheme(event.darkTheme)
+        onThemeChange();
     }
-
-    onThemeChange() {
+    const onThemeChange = () => {
         const themeLink = document.getElementById('theme-css');
         const href = themeLink.href;
         const themeFile = href.substring(href.lastIndexOf('/') + 1, href.lastIndexOf('.'));
@@ -224,40 +166,34 @@ class App extends Component {
         const themeName = themeTokens[1];
         const themeMode = themeTokens[2];
         const newThemeMode = (themeMode === 'dark') ? 'light' : 'dark';
-
-        this.changeTheme({ originalEvent: null, theme: themeName + '-' + newThemeMode });
+        changeTheme({ originalEvent: null, theme: themeName + '-' + newThemeMode });
     }
-
-    changeTheme(event) {
-        this.setState({ themeColor: event.theme.split('-')[0] })
-        this.changeStyleSheetUrl('layout-css', event.theme, 'layout');
-        this.changeStyleSheetUrl('theme-css', event.theme, 'theme');
+    const changeTheme = (event) => {
+        setThemeColor(event.theme.split('-')[0]);
+        changeStyleSheetUrl('layout-css', event.theme, 'layout');
+        changeStyleSheetUrl('theme-css', event.theme, 'theme');
     }
-
-    changeStyleSheetUrl(id, value, prefix) {
+    const changeStyleSheetUrl = (id, value, prefix) => {
         let element = document.getElementById(id);
         let urlTokens = element.getAttribute('href').split('/');
         urlTokens[urlTokens.length - 1] = prefix + '-' + value + '.css';
         let newURL = urlTokens.join('/');
 
-        this.replaceLink(element, newURL);
+        replaceLink(element, newURL);
 
         if (value.indexOf('dark') !== -1) {
-            this.setState({ darkTheme: true });
+            setDarkTheme(true);
         } else {
-            this.setState({ darkTheme: false });
+            setDarkTheme(false);
         }
     }
-
-    isIE() {
+    const isIE = () =>{
         return /(MSIE|Trident\/|Edge\/)/i.test(window.navigator.userAgent)
     }
-
-    replaceLink(linkElement, href) {
+    const replaceLink = (linkElement, href) => {
         const id = linkElement.getAttribute('id');
         const cloneLinkElement = linkElement.cloneNode(true);
-
-        if (this.isIE()) {
+        if (isIE()) {
             linkElement.setAttribute('href', href);
         }
         else {
@@ -272,68 +208,55 @@ class App extends Component {
             });
         }
     }
+    const layoutClassName = classNames('layout-wrapper', {
+        'layout-horizontal': layoutMode === 'horizontal',
+        'layout-overlay': layoutMode === 'overlay',
+        'layout-static': layoutMode === 'static',
+        'layout-slim': layoutMode === 'slim',
+        'layout-static-inactive': staticMenuDesktopInactive,
+        'layout-mobile-active': staticMenuMobileActive,
+        'layout-overlay-active': overlayMenuActive
+    });
+    const AppBreadCrumbWithRouter = withRouter(AppBreadcrumb);
+    return (
+        <div className={layoutClassName} onClick={onDocumentClick}>
+            <AppTopbar darkTheme={darkTheme} onThemeChange={onThemeChange}
+                topbarMenuActive={topbarMenuActive} activeTopbarItem={activeTopbarItem}
+                onMenuButtonClick={onMenuButtonClick}
+                onTopbarMenuButtonClick={onTopbarMenuButtonClick}
+                onTopbarItemClick={onTopbarItemClick} />
 
-    render() {
-        //const menu = useContext(MenuContext);
-        //console.log(menu);
-        const layoutClassName = classNames('layout-wrapper', {
-            'layout-horizontal': this.state.layoutMode === 'horizontal',
-            'layout-overlay': this.state.layoutMode === 'overlay',
-            'layout-static': this.state.layoutMode === 'static',
-            'layout-slim': this.state.layoutMode === 'slim',
-            'layout-static-inactive': this.state.staticMenuDesktopInactive,
-            'layout-mobile-active': this.state.staticMenuMobileActive,
-            'layout-overlay-active': this.state.overlayMenuActive
-        });
-        const AppBreadCrumbWithRouter = withRouter(AppBreadcrumb);
-
-        return (
-            <div className={layoutClassName} onClick={this.onDocumentClick}>
-
-                <AppTopbar darkTheme={this.state.darkTheme} onThemeChange={this.onThemeChange}
-                    topbarMenuActive={this.state.topbarMenuActive} activeTopbarItem={this.state.activeTopbarItem}
-                    onMenuButtonClick={this.onMenuButtonClick}
-                    onTopbarMenuButtonClick={this.onTopbarMenuButtonClick}
-                    onTopbarItemClick={this.onTopbarItemClick} />
-
-                <div className='layout-menu-container' onClick={this.onMenuClick}>
-                    <div className="layout-menu-content">
-                        <div className="layout-menu-title">MENU</div>
-                        <AppMenu model={this.menu} onMenuItemClick={this.onMenuItemClick}
-                            onRootMenuItemClick={this.onRootMenuItemClick}
-                            layoutMode={this.state.layoutMode} active={this.state.menuActive} />
-                    </div>
+            <div className='layout-menu-container' onClick={onMenuClick}>
+                <div className="layout-menu-content">
+                    <div className="layout-menu-title">MENU</div>
+                    <AppMenu model={menu} onMenuItemClick={onMenuItemClick}
+                        onRootMenuItemClick={onRootMenuItemClick}
+                        layoutMode={layoutMode} active={menuActive} />
                 </div>
-
-                <div className="layout-content">
-                    <AppBreadCrumbWithRouter />
-
-                    <div className="layout-content-container">
-                        <Route path="/dashboard" exact component={Dashboard} />
-                        <Route path="/personal-data" exact component={PersonalData} />
-                        <Route path="/sports-data" exact component={SportsData} />
-                        <Route path="/schedule" exact component={Schedule} />
-                        <Route path="/frequency" exact component={Frequency} />
-                        <Route path="/organization" exact component={Organization} />
-                        <Route path="/teams" exact component={Teams} />
-                        <Route path="/championship" exact component={Championship} />
-                        <Route path="/games" exact component={Games} />
-                        <Route path="/competitions" exact component={Competitions} />
-                    </div>
-
-                    <AppFooter />
-
-                    {this.state.staticMenuMobileActive && <div className="layout-mask"></div>}
-                </div>
-
-
-                <AppConfig layoutMode={this.state.layoutMode} darkTheme={this.state.darkTheme} themeColor={this.state.themeColor}
-                    changeMenuMode={this.changeMenuMode} changeMenuColor={this.changeMenuColor} changeTheme={this.changeTheme}
-                    onConfigButtonClick={this.onConfigButtonClick} onConfigCloseClick={this.onConfigCloseClick}
-                    onConfigClick={this.onConfigClick} configDialogActive={this.state.configDialogActive} />
             </div>
-        );
-    }
-}
+            <div className="layout-content">
+                <AppBreadCrumbWithRouter />
 
+                <div className="layout-content-container">
+                    <Route path="/dashboard" exact component={Dashboard} />
+                    <Route path="/personal-data" exact component={PersonalData} />
+                    <Route path="/sports-data" exact component={SportsData} />
+                    <Route path="/schedule" exact component={Schedule} />
+                    <Route path="/frequency" exact component={Frequency} />
+                    <Route path="/organization" exact component={Organization} />
+                    <Route path="/teams" exact component={Teams} />
+                    <Route path="/championship" exact component={Championship} />
+                    <Route path="/games" exact component={Games} />
+                    <Route path="/competitions" exact component={Competitions} />
+                </div>
+                <AppFooter />
+                {staticMenuMobileActive && <div className="layout-mask"></div>}
+            </div>
+            <AppConfig layoutMode={layoutMode} darkTheme={darkTheme} themeColor={themeColor}
+                changeMenuMode={changeMenuMode} changeMenuColor={changeMenuColor} changeTheme={changeTheme}
+                onConfigButtonClick={onConfigButtonClick} onConfigCloseClick={onConfigCloseClick}
+                onConfigClick={onConfigClick} configDialogActive={configDialogActive} />
+        </div>
+    );
+}
 export default App;

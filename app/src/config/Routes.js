@@ -1,42 +1,54 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { Route, withRouter} from 'react-router-dom';
 import App from "../Theme";
 import Login from "../Pages/Login";
 import Error from "../Pages/Error";
 import NotFound from "../Pages/NotFound";
 import Access from "../Pages/Access";
+import { UserContext } from '../context/User'
 function Routes (props) {
-    //alert(props.location.pathname);
-    console.log(props.location.pathname);
+    const context = useContext(UserContext);
+    const userRules = context.user.rules
+    const routePermission = (rules,url,component) =>{
+        if (rules == "all") {
+            return <Route path= {url} component={component} />;
+        }
+        for (var i in userRules) {
+            if (rules.indexOf(userRules[i]) > -1) {
+                return <Route path={url} component={component} /> ;
+            }
+        }
+        return <NotFound />;
+    }
     switch (props.location.pathname) {
         case "/login":
-            return <Route path="/login" component={Login} />
+            return routePermission("all", "/login", Login);
         case "/error":
-            return <Route path="/error" component={Error} />
+            return routePermission("all", "/error", Error);
         case "/":
-            return <Route path="/" component={Login} />
+            return routePermission("all", "/", Login);
         case "/access":
-            return <Route path="/access" component={Access} />
+            return routePermission("all", "/access", Access);
         case "/dashboard":
-            return <Route path="/dashboard" component={App} />
+            return routePermission("all", "/dashboard", App);
         case "/personal-data":
-            return <Route path="/personal-data" component={App} />
+            return routePermission(["play"], "/personal-data", App);
         case "/sports-data":
-            return <Route path="/sports-data" component={App} />
+            return routePermission(["play"], "/sports-data", App);
         case "/schedule":
-            return <Route path="/schedule" component={App} />
+            return routePermission(["adm"], "/schedule", App);
         case "/frequency":
-            return <Route path="/frequency" component={App} />
+            return routePermission(["play"], "/frequency", App);
         case "/organization":
-            return <Route path="/organization" component={App} />
+            return routePermission(["adm"], "/organization", App)
         case "/teams":
-            return <Route path="/teams" component={App} />
+            return routePermission(["adm"], "/teams", App)
         case "/championship":
-            return <Route path="/championship" component={App} />
+            return routePermission(["play"], "/championship", App);
         case "/games":
-            return <Route path="/games" component={App} />
+            return routePermission(["play"], "/games", App);
         case "/competitions":
-            return <Route path="/competitions" component={App} />
+            return routePermission(["play"], "/competitions", App);
         default:
             return <NotFound/>;
     }

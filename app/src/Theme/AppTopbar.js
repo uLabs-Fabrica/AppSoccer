@@ -12,11 +12,12 @@ function AppTopbar (props){
     const { saveUser } = useContext(UserContext);
     useEffect(() => {
         getSession().then((user) => {
+            //alert("save user");
             saveUser(user);
         }, (error) => {
             history.push("/login");
         })
-    });
+    },[]);
     let topbarItemsClassName = classNames('topbar-menu fadeInDown', {'topbar-menu-visible': props.topbarMenuActive});
     const onTopbarItemClick = (event, item) =>{
         if(props.onTopbarItemClick) {

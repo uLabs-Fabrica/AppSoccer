@@ -7,20 +7,24 @@ export const auth = (email, password) => {
         firebase.auth().signInWithEmailAndPassword(email, password).then((resp)=>{
             console.log(resp.user.uid);
             console.log(resp.user);
-            resolve(resp.user);
-            //const db =  firebase.firestore();
-            // let ref = db.collection('roles').doc("BxJj5DlzaOYWnfGpo5g4g0Kp88Q2");
-            // ref.get().then(doc => {
-            //     if (!doc.exists) {
-            //         console.log('No such document!');
-            //     } else {
-            //         console.log('Document data:', doc.data());
-            //     }
-            // })
-            // .catch(err => {
-            //     console.log('Error getting document', err);
-            // });
-            //window.location = "/#/dashboard";
+            const db = firebase.firestore();
+            let collection = db.collection('users').doc(resp.user.uid);
+            collection.get().then(snapshot => {
+                console.log(snapshot);
+                if (snapshot.exists) {
+                    console.log(snapshot.data());
+                    let user = snapshot.data();
+                    user.uid = resp.user.uid;
+                    resolve(user);
+                } else {
+                    console.log("não encontrou")
+                    reject("Usuário sem permissão ou cargo definido");
+                }
+            })
+            .catch(error => {
+                console.log('Error getting document', error);
+                reject("Erro na autenticação");
+            });
         }, (error)=>{
             console.log(error);
             switch (error.code) {
@@ -48,7 +52,25 @@ export const getSession = () =>{
     return new Promise((resolve, reject) => {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                resolve(user);
+                const db = firebase.firestore();
+                 console.log("olá")
+                let collection = db.collection('users').doc(user.uid);
+                collection.get().then(snapshot => {
+                    console.log(snapshot);
+                    if (snapshot.exists) {
+                        console.log(snapshot.data());
+                        let user = snapshot.data();
+                        user.uid = user.uid;
+                        resolve(user);
+                    }else{
+                        console.log("não encontrou")
+                        reject("Você não tem papel");
+                    }
+                })
+                .catch(error => {
+                    console.log('Error getting document', error);
+                    reject("Erro na autenticação");
+                });
                 // User is signed in.
             } else {
                 reject("sem usuário")
