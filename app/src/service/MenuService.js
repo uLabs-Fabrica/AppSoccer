@@ -1,5 +1,4 @@
-import React,{useContext} from 'react';
-import { UserContext } from '../context/User';
+import React from 'react';
 import firebase from '../config/Firebase';
 export const createMenu = () =>{
     return [
@@ -137,10 +136,10 @@ export const createMenu = () =>{
 function Menu(props) {
     console.log("props",props);
     console.log("menuu");
-    const context = useContext(UserContext);
-    const { saveUser } = useContext(UserContext);
-    console.log("context",context);
-    let user = context.user;
+    //const context = useContext(UserContext);
+    //const { saveUser } = useContext(UserContext);
+    //console.log("context",context);
+    let user = props.user;
     let menu = [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard' }];
     let menuLength = 1;
     user.rules=['play'];
@@ -262,6 +261,52 @@ function Menu(props) {
             if(menu.length == menuLength+1){
                 // user.menu = menu;
                 // saveUser(user);
+                menu.push({
+                    label: 'Tema', icon: 'pi pi-fw pi-palette',
+                    items: [
+                        {
+                            label: 'Blue', icon: 'pi pi-fw pi-palette', styleClass: 'blue-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'blue-light' })
+                            }
+                        },
+                        {
+                            label: 'Green', icon: 'pi pi-fw pi-palette', styleClass: 'green-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'green-light' })
+                            }
+                        },
+                        {
+                            label: 'Cyan', icon: 'pi pi-fw pi-palette', styleClass: 'cyan-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'cyan-light' })
+                            }
+                        },
+                        {
+                            label: 'Purple', icon: 'pi pi-fw pi-palette', styleClass: 'purple-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'purple-light' })
+                            }
+                        },
+                        {
+                            label: 'Indigo', icon: 'pi pi-fw pi-palette', styleClass: 'indigo-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'indigo-light' })
+                            }
+                        },
+                        {
+                            label: 'Yellow', icon: 'pi pi-fw pi-palette', styleClass: 'yellow-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'yellow-light' })
+                            }
+                        },
+                        {
+                            label: 'Orange', icon: 'pi pi-fw pi-palette', styleClass: 'orange-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'orange-light' })
+                            }
+                        },
+                        {
+                            label: 'Pink', icon: 'pi pi-fw pi-palette', styleClass: 'pink-theme', command: (event) => {
+                                props.changeTheme({ originalEvent: event, theme: 'pink-light' })
+                            }
+                        }
+
+                    ]
+                })
                 props.callback(menu);
             }
         }

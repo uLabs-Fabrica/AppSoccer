@@ -6,13 +6,11 @@ import {logout} from '../service/AuthService';
 import {useHistory} from 'react-router-dom';
 import {getSession} from '../service/AuthService';
 function AppTopbar (props){
-
     const history = useHistory();
     const context = useContext(UserContext);
     const { saveUser } = useContext(UserContext);
     useEffect(() => {
         getSession().then((user) => {
-            //alert("save user");
             saveUser(user);
         }, (error) => {
             history.push("/login");
@@ -43,7 +41,12 @@ function AppTopbar (props){
 
             <button className="p-link profile" onClick={props.onTopbarMenuButtonClick}>
                 <span className="username">{context.user.email}</span>
-                <img src="assets/layout/images/avatar/avatar.png" alt="apollo-layout" />
+                {context.user['prsnl-dta'] && context.user['prsnl-dta']['avatar'] && 
+                    <img src={context.user['prsnl-dta']['avatar']} alt="apollo-layout" />                
+                }
+                {!!context.user['prsnl-dta'] && !context.user['prsnl-dta']['avatar'] && 
+                    <img src="assets/layout/images/avatar/avatar.png" alt="apollo-layout" />
+                }
                 <i className="pi pi-angle-down"></i>
             </button>
 

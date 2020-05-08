@@ -56,12 +56,12 @@ export const getSession = () =>{
                  console.log("olá")
                 let collection = db.collection('users').doc(user.uid);
                 collection.get().then(snapshot => {
-                    console.log(snapshot);
                     if (snapshot.exists) {
                         console.log(snapshot.data());
-                        let user = snapshot.data();
-                        user.uid = user.uid;
-                        resolve(user);
+                        let uid = JSON.parse(JSON.stringify(user)).uid;
+                        let data = snapshot.data();
+                        data.uid = uid;
+                        resolve(data);
                     }else{
                         console.log("não encontrou")
                         reject("Você não tem papel");

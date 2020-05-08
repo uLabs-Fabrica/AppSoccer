@@ -1,4 +1,4 @@
-import React, { useContext,  useState} from 'react';
+import React, { useContext,  useState, useEffect} from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from "primereact/button";
 import "./style.css";
@@ -8,23 +8,56 @@ import { InputMask} from 'primereact/inputmask';
 import axios from 'axios';
 import 'react-image-crop/dist/ReactCrop.css';
 import Cropper from '../../components/Cropper';
-
+import {Post, setFile} from '../../service/APIService';
+import moment from 'moment/moment';
+import { Dialog } from 'primereact/dialog';
 function PersonalData() {
     const context = useContext(UserContext);
-    const [imgSelect, setImgSelect] = useState(null)
+    //const { saveUser } = useContext(UserContext);
+    const [imgSelect, setImgSelect] = useState(null);
+    const [typeFile, setTypeFile] = useState('');
     const [modalCrop, setModalCrop] = useState(false);
+    const [alert, setAlert] = useState({ title: '', label: '' });
     const[user, setUser] = useState({});
-    const onSelectFile = e => {
-        console.log("onSelectFile");
-        console.log(e);
-        console.log(e.files.length);
+    useEffect(()=>{
+        let data = context.user["prsnl-dta"];
+        if (data){
+            console.log(data);
+            if(data.birthday && data.birthday.indexOf('/')== -1){
+                let newDate = moment(data.birthday,'YYYY-MM-DD').format('DD/MM/YYYY');
+                data.birthday = newDate;
+            }
+            setUser(data);
+        }
+    })
+    const onSelectFile = (e) => {
         if (e.files && e.files.length > 0) {
             console.log(imgSelect);
             setImgSelect(e.files[0]);
         }
     };
+    const onChange = (ref, value) => {
+        console.log("ref",ref);
+        console.log("value",value);
+        user[ref] = value;
+        setUser(user);
+    }
     const saveUser = (e)=>{
-        e.preventDefault()
+        console.log(user);
+        user.birthday = moment(user.birthday, "DD/MM/YYYY").format("YYYY-MM-DD");
+        console.log(context);
+        let data = {'prsnl-dta':user};
+        console.log(data);
+        context.saveUser(data);
+        Post(['users'],[context.user.uid],data).then(()=>{
+            console.log("add");
+            setAlert({title:"Sucesso!",label:"Dados foram atualizados"});
+        },(error)=>{
+            setAlert({ title: "Erro!", label: "Erro ao salvar dados" });
+            console.log("error");
+            console.log(error);
+        });
+        e.preventDefault();
     }
     const getZipCode = (zipCode) =>{
         console.log(zipCode.length);
@@ -33,38 +66,62 @@ function PersonalData() {
             axios.get("https://viacep.com.br/ws/" + zipCode + "/json").then((resp)=>{
                 console.log(resp);
                 if(resp.status === 200){
-                    setUser({
-                        street:resp.data.logradouro,
-                        state:resp.data.uf,
-                        city:resp.data.localidade
-                    })
+                    let data = {
+                        "street": resp.data.logradouro,
+                        "state": resp.data.uf,
+                        "city": resp.data.localidade,
+                        "zipCode": zipCode
+                    }
+                    setUser({...user,...data});
                 }
             })
         }
     }
-    const onSelect = (event)=>{
-        console.log("uploadHandler");
-        console.log(event.files[0].size);
+    const onSelect = (event,type)=>{
+        setTypeFile(type);
         if (event.files[0].size <= 2000000){
             setModalCrop(true);
             onSelectFile(event);
         }
-        console.log("uploadHandler");
     }
     const uploadHandler = (blob) =>{
-        console.log(blob);
-        setUser({ avatar:"https://writestylesonline.com/wp-content/uploads/2016/08/Follow-These-Steps-for-a-Flawless-Professional-Profile-Picture-1024x1024.jpg"});
-        // var storageRef = firebase.storage().ref();
-        // var userAvatar = storageRef.child('profile/user.pmg');
-
-        // userAvatar.put(blob).then(function (snapshot) {
-        //     console.log('Uploaded a blob or file!');
-        // }, function (error) {
-        //     console.log(error);
-        // });
+        console.log(blob, 'profile/' + context.user.uid + "/"+typeFile + Math.random() + ".png");
+        // setUser({ avatar:"https://writestylesonline.com/wp-content/uploads/2016/08/Follow-These-Steps-for-a-Flawless-Professional-Profile-Picture-1024x1024.jpg"});
+        setFile(blob, 'profile/' + context.user.uid + "/"+typeFile + Math.random() + ".png").then((url) => {
+            saveFiles(url);
+        }, () => {
+            setAlert({ title: "Erro", "label": "Erro ao carregar imagem, tente novamente" });
+        })
+    }
+    const saveFiles = (url) =>{
+        let data = {"prsnl-dta":{}};
+        data["prsnl-dta"][typeFile]= url;
+        Post(['users'], [context.user.uid], data).then(() => {
+            let data = {};
+            data[typeFile] = url;
+            user[typeFile] = url;
+            let result = Object.assign(user,data,context.user);
+            console.log(result);
+            context.user['prsnl-dta'] = user;
+            context.saveUser(context.user);
+            setUser({...user,...result});
+            console.log(user);
+            console.log(data);
+            console.log(context);
+            setTimeout(() => {
+                console.log(user);
+                console.log(data);
+                console.log(context);
+            }, 2000);
+        }, () => {
+            setAlert({ title: "Erro", "label": "Erro ao carregar imagem, tente novamente" });
+        });
     }
     return (
         <div className="personal">
+            <Dialog header={alert.title} visible={alert.label !== ''} style={{ width: '50vw' }} modal={true} onHide={() => setAlert({ label: '' })}>
+                {alert.label}
+            </Dialog>
             <Cropper modalCrop={modalCrop} imgSelect={imgSelect} onCut={(blob)=>uploadHandler(blob)} onHide={()=>{setModalCrop(false)}}/>
             <div className="p-grid">
                 <div className="p-col-12">
@@ -75,17 +132,17 @@ function PersonalData() {
                                 <div className="p-col-6">
                                     <div className="p-grid">
                                         <div className="p-md-6">
-                                            <InputText required value={user.name} onChange={e => setUser({name:e.target.value})} placeholder="Nome completo" />
+                                            <InputText required defaultValue={user.name} onChange={e => onChange("name", e.target.value)} placeholder="Nome completo" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputMask required value={user.birthday} onChange={e => setUser({ birthday: e.target.value })} mask="99/99/9999" placeholder="Data de Nascimento"/>
+                                            <InputMask required value={user.birthday}  onChange={e => onChange("birthday", e.target.value)} mask="99/99/9999" placeholder="Data de Nascimento"/>
                                             {/* <Calendar required value={user.birthday} onChange={e => setUser({ birthday: e.target.value })} placeholder="Data de Nascimento"/> */}
                                         </div>
                                         <div className="p-md-6">
-                                            <InputMask required value={user.telephone} onChange={e => setUser({ telephone: e.target.value })} mask="(99)9?9999-9999" placeholder="Telefone" />
+                                            <InputMask required unmask={true} value={user.telephone} onChange={e => onChange("telephone", e.target.value )} mask="(99)9?9999-9999" placeholder="Telefone" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText required disabled={true} value={context.user.email}  placeholder="Email" />
+                                            <InputText required disabled={true} defaultValue={context.user.email}  placeholder="Email" />
                                         </div>
                                     </div>
                                     <hr></hr>
@@ -95,19 +152,19 @@ function PersonalData() {
                                             <InputMask value={user.zipCode} unmask={true} onChange={e => getZipCode(e.target.value)} mask="99999-999" placeholder="CEP" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText disabled={true} value={user.street} onChange={e => setUser({ street: e.target.value })} placeholder="Rua" />
+                                            <InputText disabled={true} defaultValue={user.street} onChange={e => onChange("street", e.target.value)} placeholder="Rua" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText type="number" value={user.number} onChange={e => setUser({ number: e.target.value })} placeholder="Número" />
+                                            <InputText type="number" defaultValue={user.number} onChange={e => onChange( "number" ,e.target.value )} placeholder="Número" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText value={user.complement} onChange={e => setUser({ complement: e.target.value })} placeholder="Complemento" />
+                                            <InputText defaultValue={user.complement} onChange={e => onChange("complement", e.target.value)} placeholder="Complemento" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText disabled={true} value={user.city} onChange={e => setUser({ city: e.target.value })} placeholder="Cidade" />
+                                            <InputText  defaultValue={user.city} onChange={e => onChange("city", e.target.value)} placeholder="Cidade" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText disabled={true} value={user.state} onChange={e => setUser({ state: e.target.value })} placeholder="Estado" />
+                                            <InputText disabled={true} defaultValue={user.state} onChange={e => onChange("state", e.target.value )} placeholder="Estado" />
                                         </div>
                                     </div>
                                     <div className="p-grid">
@@ -122,32 +179,50 @@ function PersonalData() {
                                             {!user.avatar &&
                                                 <div>
                                                     <h3>Selecione uma foto 3x4</h3>
-                                                    <FileUpload  mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e)}/>
+                                                    <FileUpload  mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e,'avatar')}/>
                                                 </div>
                                             }
                                             {user.avatar &&
                                                 <div>
-                                                    <img style={{width:'50%'}} alt="profile" src={user.avatar}/>
+                                                    <img style={{width:'50%'}} alt="Imagem de Perfil" src={user.avatar}/>
                                                     <br/>
-                                                    <Button label="Trocar foto" onClick={()=>{setUser({avatar:null})}}/>
+                                                    <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e, 'avatar')} />
                                                 </div>
                                             }
                                         </div>
                                     </div>
                                     <div className="p-col-12">
                                         <div className="card">
-                                            <div>
-                                                <h3>Selecione a foto do RG</h3>
-                                                <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e)}/>
-                                            </div>
+                                            {!user.rg &&
+                                                <div>
+                                                    <h3>Selecione a foto do RG</h3>
+                                                    <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e, 'rg')}/>
+                                                </div>
+                                            }
+                                            {user.rg &&
+                                                <div>
+                                                    <img style={{ width: '50%' }} alt="Imagem do RG" src={user.rg} />
+                                                    <br />
+                                                    <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e, 'rg')} />
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                     <div className="p-col-12">
                                         <div className="card">
-                                            <h3>Selecione a foto do CPF</h3>
-                                            {/* <FileUpload name="demo[]" url="./upload.php" onUpload={this.onUpload} multiple={true} accept="image/*" maxFileSize={1000000} /> */}
-                                            <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e)}/>
-                                            {/* <ProgressBar value='50' /> */}
+                                            {!user.cpf &&
+                                                <div>
+                                                    <h3>Selecione a foto do CPF</h3>
+                                                    <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e, 'cpf')} />
+                                                </div>
+                                            }
+                                            {user.cpf &&
+                                                <div>
+                                                    <img style={{ width: '50%' }} alt="Imagem do RG" src={user.cpf} />
+                                                    <br />
+                                                    <FileUpload mode="basic" multiple={true} maxFileSize={2000000} onSelect={e => onSelect(e, 'cpf')} />
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>

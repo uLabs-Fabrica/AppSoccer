@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import classNames from 'classnames';
 import  AppTopbar  from './AppTopbar';
 import { AppBreadcrumb } from './AppBreadcrumb';
@@ -6,7 +6,7 @@ import { AppFooter } from './AppFooter';
 import { AppMenu } from './AppMenu';
 import { AppConfig } from './AppConfig';
 import { withRouter } from 'react-router';
-import { Route } from 'react-router-dom';
+import { Route, useLocation, useHistory } from 'react-router-dom';
 import { Dashboard } from '../Pages/Dashboard';
 import 'primereact/resources/primereact.min.css';
 import '@fullcalendar/core/main.css';
@@ -27,6 +27,7 @@ import Championship from '../Pages/Championship';
 import Games from '../Pages/Games';
 import Competitions from '../Pages/Competitions';
 import { UserContext } from '../context/User';
+import PermissionRoute from '../service/RouteService';
 function App(props) {
     //static contextType = MenuContext
     const [layoutMode, setLayoutMode] = useState('static');
@@ -45,15 +46,15 @@ function App(props) {
     let onConfigButtonClick = null;
     let configClick = null;
     
-    
+    useEffect(()=>{
+        Menu({menu:menu,callback:getMenu, changeTheme:changeTheme, user:user});
+    },[])
     const context = useContext(UserContext);
     let user = context.user;
-    //alert("mymenu");
     console.log(user);
     const getMenu = (data) =>{
         setMenu(data);
     }
-    Menu({menu:menu,callback:getMenu});
     console.log(Menu);
     const onMenuClick = (event) => {
         menuClick = true;
@@ -220,6 +221,7 @@ function App(props) {
     const AppBreadCrumbWithRouter = withRouter(AppBreadcrumb);
     return (
         <div className={layoutClassName} onClick={onDocumentClick}>
+            <PermissionRoute userRules={context.user.rules}/>
             <AppTopbar darkTheme={darkTheme} onThemeChange={onThemeChange}
                 topbarMenuActive={topbarMenuActive} activeTopbarItem={activeTopbarItem}
                 onMenuButtonClick={onMenuButtonClick}

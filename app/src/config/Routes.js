@@ -7,18 +7,20 @@ import NotFound from "../Pages/NotFound";
 import Access from "../Pages/Access";
 import { UserContext } from '../context/User'
 function Routes (props) {
-    const context = useContext(UserContext);
-    const userRules = context.user.rules
+    // const context = useContext(UserContext);
+    // const userRules = context.user.rules;
+    
     const routePermission = (rules,url,component) =>{
-        if (rules == "all") {
-            return <Route path= {url} component={component} />;
-        }
-        for (var i in userRules) {
-            if (rules.indexOf(userRules[i]) > -1) {
-                return <Route path={url} component={component} /> ;
-            }
-        }
-        return <NotFound />;
+        return <Route path={url} component={component} />;
+        // if (rules == "all") {
+        //     return <Route path= {url} component={component} />;
+        // }
+        // for (var i in userRules) {
+        //     if (rules.indexOf(userRules[i]) > -1) {
+        //         return <Route path={url} component={component} /> ;
+        //     }
+        // }
+        // return <NotFound />;
     }
     switch (props.location.pathname) {
         case "/login":

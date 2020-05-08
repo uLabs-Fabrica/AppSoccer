@@ -1,7 +1,9 @@
 .datatable-demo .p-datatable-responsive .p-datatable-tbody > tr.p-datatable-row > td:last-child .p-column-title {
   display: none;
 }
-
+.profile img{
+  border-radius: 50%;
+}
 .carousel-demo .p-carousel .p-carousel-content .p-carousel-item .car-details > .p-grid {
   border-radius: 3px;
   margin: 0.3em;
