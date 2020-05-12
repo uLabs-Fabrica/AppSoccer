@@ -29,7 +29,7 @@ function PersonalData() {
             }
             setUser(data);
         }
-    })
+    },[context.user])
     const onSelectFile = (e) => {
         if (e.files && e.files.length > 0) {
             console.log(imgSelect);
@@ -49,7 +49,7 @@ function PersonalData() {
         let data = {'prsnl-dta':user};
         console.log(data);
         context.saveUser(data);
-        Post(['users'],[context.user.uid],data).then(()=>{
+        Post(['users'],[context.user.uid],data,"set").then(()=>{
             console.log("add");
             setAlert({title:"Sucesso!",label:"Dados foram atualizados"});
         },(error)=>{
@@ -72,7 +72,9 @@ function PersonalData() {
                         "city": resp.data.localidade,
                         "zipCode": zipCode
                     }
+                    console.log(data);
                     setUser({...user,...data});
+                    console.log(user);
                 }
             })
         }
@@ -161,7 +163,7 @@ function PersonalData() {
                                             <InputText defaultValue={user.complement} onChange={e => onChange("complement", e.target.value)} placeholder="Complemento" />
                                         </div>
                                         <div className="p-md-6">
-                                            <InputText  defaultValue={user.city} onChange={e => onChange("city", e.target.value)} placeholder="Cidade" />
+                                            <InputText disabled={true} defaultValue={user.city} onChange={e => onChange("city", e.target.value)} placeholder="Cidade" />
                                         </div>
                                         <div className="p-md-6">
                                             <InputText disabled={true} defaultValue={user.state} onChange={e => onChange("state", e.target.value )} placeholder="Estado" />
