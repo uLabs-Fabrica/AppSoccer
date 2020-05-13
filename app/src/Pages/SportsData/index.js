@@ -16,6 +16,7 @@ function SportsData() {
     const [alert, setAlert] = useState({ title: '', label: '' });
     const [confirm, setConfirm] = useState({ title: '', label: '' });
     const context = useContext(UserContext);
+    const [newSport, setNewSport] = useState({});
     useEffect(()=>{
         if(context.user.uid){
             GET(['users', 'sprt-dta'], [context.user.uid]).then((snapshot)=>{
@@ -30,7 +31,6 @@ function SportsData() {
             })
         }
     }, [context.user.uid])
-    const [newSport, setNewSport] = useState({});
     const onChange = (ref,value) =>{
         newSport[ref]=value;
         setNewSport(newSport);
@@ -118,12 +118,18 @@ function SportsData() {
                         <Column field="rewards" header="Conquistas" sortable={true} />
                         <Column body={templateActions} />
                     </DataTable>
-                    <Button label="Cadastrar" type="button" onClick={()=>{setList(false)}} className="p-button-success" />
+                <Button label="Cadastrar" type="button" onClick={() => { setList(false); setNewSport({})}} className="p-button-success" />
                 </div>
             }
             {!list &&
                 <div className="card card-w-title">
-                    <h1>Novo Dado Esportivo</h1>
+                    <Button icon="pi pi-arrow-left" onClick={() => { setList(true); setNewSport({}); setEditMode(false)}}/>
+                    {!editMode &&
+                        <h1>Novo Dado Esportivo</h1>
+                    }
+                    {editMode &&
+                        <h1>Editar Dado Esportivo</h1>
+                    }
                     <form onSubmit={saveSports}>
                         <div className="p-grid">
                             <div className="p-md-6">

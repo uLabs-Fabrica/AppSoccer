@@ -91,14 +91,15 @@ function PersonalData() {
         // setUser({ avatar:"https://writestylesonline.com/wp-content/uploads/2016/08/Follow-These-Steps-for-a-Flawless-Professional-Profile-Picture-1024x1024.jpg"});
         setFile(blob, 'profile/' + context.user.uid + "/"+typeFile + Math.random() + ".png").then((url) => {
             saveFiles(url);
-        }, () => {
+        }, (error) => {
+            console.log(error);
             setAlert({ title: "Erro", "label": "Erro ao carregar imagem, tente novamente" });
         })
     }
     const saveFiles = (url) =>{
         let data = {"prsnl-dta":{}};
         data["prsnl-dta"][typeFile]= url;
-        Post(['users'], [context.user.uid], data).then(() => {
+        Post(['users'], [context.user.uid], data,"set").then(() => {
             let data = {};
             data[typeFile] = url;
             user[typeFile] = url;
@@ -115,7 +116,9 @@ function PersonalData() {
                 console.log(data);
                 console.log(context);
             }, 2000);
-        }, () => {
+        }, (error) => {
+            console.log("save files");
+            console.log(error);
             setAlert({ title: "Erro", "label": "Erro ao carregar imagem, tente novamente" });
         });
     }
